@@ -72,7 +72,7 @@ User account log in view create
 '''''
 class UserLoginViewCreate(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         serializer = UserLoginSerializerCreate(data=request.data)
 
