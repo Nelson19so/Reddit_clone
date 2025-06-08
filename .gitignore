@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.env
+*.sqlite3
+venv/
+env/
+*.log
+
+# Django
+db.sqlite3
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+.DS_Store
+media/
+staticfiles/
+
+# VSCode
+.vscode/
+
+# React (in /client folder)
+client/node_modules/
+client/build/
+client/.env
+
+# macOS
+.DS_Store
+
+# system files
+Thumbs.db
+
+# coverage and test
+htmlcov/
+coverage.xml
+.pytest_cache/
+.tox/
+
+# migrations
+**/migrations/
+!*/migrations/__init__.py

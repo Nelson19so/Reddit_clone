@@ -6,7 +6,7 @@ A full-stack Reddit-style blog post system using **Django REST Framework** as th
 
 ## 📁 Project Structure
 
-reddit_clone/ ├── server/                  # Django backend │   ├── apps/ │   │   └── accounts/        # Custom user model & auth logic │   ├── manage.py │   ├── settings.py │   └── urls.py └── client/                  # React frontend └── src/
+reddit_clone/ ├── server/ # Django backend │ ├── apps/ │ │ └── accounts/ # Custom user model & auth logic │ ├── manage.py │ ├── settings.py │ └── urls.py └── client/ # React frontend └── src/
 
 ---
 
@@ -210,3 +210,19 @@ MIT License. See LICENSE.md file for details.
 
 Let me know if you'd like a Markdown file version you can directly download.
 
+```
+
+---
+
+## 💻 Tech Stack
+
+- **Backend**: Django, Django REST Framework, PostgreSQL, Simple JWT, Allauth
+- **Frontend**: React.js, Fetch API
+- **Authentication**: Custom JWT, Google OAuth2 via Allauth
+- **Deployment Ready**: Gunicorn, Nginx, .env based config
+
+---
+
+## 📸 Preview
+
+![App Screenshot](link-to-screenshot.png)
