@@ -6,7 +6,60 @@ A full-stack Reddit-style blog post system using **Django REST Framework** as th
 
 ## 📁 Project Structure
 
-reddit_clone/ ├── server/ # Django backend │ ├── apps/ │ │ └── accounts/ # Custom user model & auth logic │ ├── manage.py │ ├── settings.py │ └── urls.py └── client/ # React frontend └── src/
+    |   +---public
+    |   |       vite.svg
+    |   |
+    |   \---src
+    |       |   App.jsx
+    |       |   main.jsx
+    |       |
+    |       \---assets
+    |           |   react.svg
+    |           |
+    |           \---css
+    |                   main.css
+    |
+    \---server
+        |   .env
+        |   db.sqlite3
+        |   manage.py
+        |   requirements.txt
+        |
+        +---apps
+        |   \---accounts
+        |       |   admin.py
+        |       |   apps.py
+        |       |   backend.py
+        |       |   models.py
+        |       |   serializer.py
+        |       |   tests.py
+        |       |   urls.py
+        |       |   views.py
+        |       |   __init__.py
+        |
+        \---server
+            |   asgi.py
+            |   db.sqlite3
+            |   urls.py
+            |   wsgi.py
+            |   __init__.py
+            |
+            +---settings
+            |   |   base.py
+            |   |   dev.py
+            |   |   prod.py
+            |   |
+            |   \---__pycache__
+            |           base.cpython-313.pyc
+            |           dev.cpython-313.pyc
+            |           settings.cpython-313.pyc
+            |
+            \---__pycache__
+                    settings.cpython-313.pyc
+                    urls.cpython-313.pyc
+                    wsgi.cpython-313.pyc
+                    __init__.cpython-313.pyc
+
 
 ---
 
@@ -21,11 +74,13 @@ reddit_clone/ ├── server/ # Django backend │ ├── apps/ │ │ └
 
 ---
 
-## ⚙️ Backend Setup (Django + DRF)
-
-### 1. Clone the repository
+## setting up the Project (Front-end & Backend + google allAuth setup)
 
 ```bash
+⚙️ Backend Setup (Django + DRF)
+
+1. Clone the repository
+
 git clone https://github.com/your-username/reddit-clone.git
 cd reddit-clone/server
 
