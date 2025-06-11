@@ -42,11 +42,12 @@ class BlogPost(models.Model):
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
+# blog post comment model
 class Comment(models.Model):
     post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
