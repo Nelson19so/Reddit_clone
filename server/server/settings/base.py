@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     
     # local installed applications
-    'apps.accounts.apps.AccountsConfig'
+    'apps.accounts.apps.AccountsConfig',
+    'apps.community.apps.CommunityConfig'
 ]
 
 MIDDLEWARE = [
