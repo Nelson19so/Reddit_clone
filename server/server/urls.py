@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/accounts/google/', include('allauth.urls')),
     path('api/accounts/google/login/', LoginView.as_view(), name='google_login'),
     path('api/accounts/google/signup/', SignupView.as_view(), name='google_signup'),
+    path('api/communities/', include('apps.community.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser
+from .models import CustomUser, Profile
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 import re
 from django.utils.text import slugify
@@ -12,10 +12,12 @@ User = get_user_model()
 
 # user profile serializer create
 class UserProfileViewSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
-        model = CustomUser
-        fields = ('username', 'email')
+        model = Profile
+        fields = ('username', 'email', 'avatar', 'bio')
         read_only = ['id']
 
 '''''
@@ -78,14 +80,18 @@ class UserLoginSerializerCreate(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
+    # validates the user attempting to log in
     def validate(self, data):
         username_or_email = data.get('username')
         password = data.get('password')
 
+        # authenticating the user by username or email
         user = authenticate(username=username_or_email, password=password)
 
+        # raise error if the user is not valid
         if user is None:
             raise serializers.ValidationError('Invalid credentials')
+        # returns user for later use in view
         return user
 
 

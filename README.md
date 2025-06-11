@@ -178,8 +178,8 @@ Endpoint	Method	Description
 /api/profile/	GET	View user profile
 /api/profile/update/	PUT	Update profile
 /api/posts/	GET/POST	Post list or create
-/api/posts/:id/	GET	Retrieve post
-/api/comments/:post_id/	POST	Add comment to post
+/api/posts/:slug/	GET	Retrieve post
+/api/comments/:slug/	POST	Add comment to post
 /api/communities/	GET/POST	Community list/create
 /api/token/verify/	POST	Verify JWT token
 

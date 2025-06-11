@@ -17,4 +17,23 @@ class CommentSerializer(serializers.Serializer):
         read_only_fields = ['author', 'replies', 'created_at']
 
     def create(self, validated_data):
-        return Comment.objects.create(**validated_data)
+        comment = Comment.objects.create(**validated_data)
+        return comment
+    
+# blog post serializer create
+class CommunitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Community
+        fields = ['id', 'slug', 'name', 'description', 'created_at', 'owner']
+        read_only = ['id', 'slug', 'created_at']
+    
+    def get_is_members(self, obj):
+        request = self.context.get('request')
+        return request.user in obj.members.all() if request.is_authenticated else False
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['owner'] = request.user
+        return BlogPost.objects.create(**validated_data)
+

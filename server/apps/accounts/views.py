@@ -5,20 +5,22 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializer import UserProfileViewSerializer, UserRegistrationSerializer, UserLoginSerializerCreate
 from django.contrib.auth import get_user_model, login, logout
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
 from .models import CustomUser
 
 # defining the user
 User = get_user_model()
 
 # user profile view
-class UserProfileView(generics.ListAPIView):
+class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileViewSerializer
     lookup_field = 'pk'
 
     def get_object(self):
-        return self.request.user
+        # always return the profile of the currently authenticated user
+        return self.request.user.profile
 
 '''''
 user account registration view create
@@ -52,6 +54,7 @@ class UserRegistrationViewCreate(generics.CreateAPIView):
                     'username': user.username,
                     'email': user.email,
                 },
+                # passing the token to the frontend
                 'token': {
                     'access': str(refresh.access_token),
                     'refresh': str(refresh)
@@ -90,6 +93,13 @@ class UserLoginViewCreate(APIView):
             return Response({
                 'success': True,
                 'message': 'You have successfully been login',
+                # passing te user data
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                },
+                # passing the token to the frontend
                 'token': {
                     'access': str(refresh.access_token),
                     'refresh': str(refresh)
@@ -102,13 +112,32 @@ class UserLoginViewCreate(APIView):
             'message': serializer.errors
         }, status=status.HTTP_404_NOT_FOUND)
 
-# user log out view create
-class LogOutViewCreate(APIView):
+# user log out view for user 
+class LogOutUserView(APIView):
+    # only allow authenticated users to use this view
     permission_classes = [IsAuthenticated]
 
+    # handles the logic for black listing/logging out user
     def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            refresh_token = request.data['refresh']
+            token = RefreshToken(refresh_token)
+            # prevent re use
+            token.blacklist()
+            return Response({
+                'success': True,
+                'message': 'Logged out successfully'
+            }, status=status.HTTP_205_RESET_CONTENT)
+        except TokenError:
+            return Response({
+                'success': True,
+                'message': 'Invalid token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except KeyError:
+            return Response({
+                'success': True,
+                'message': 'Refresh token is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 # delete account view create for authenticated users
 class UserDeleteViewCreate(generics.DestroyAPIView):
@@ -117,8 +146,8 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
     # making sure we are getting the user currently logged in
     def get_object(self):
         return self.request.user
-    
-    # deleting user
+
+    # deleting user and it related content
     def delete(self, request, *args, **kwargs):
         user = self.get_object()
         user.delete()
@@ -126,3 +155,21 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
             'success': True,
             'message': 'User Created successfully',
         }, status=status.HTTP_204_NO_CONTENT)
+
+# token verify api view
+class TokenVerifyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = request.data.get('token')
+        try:
+            AccessToken(token)
+            return Response({
+                'message': 'Token is valid',
+                'success': True,
+            }, status=status.HTTP_200_OK)
+        except TokenError:
+            return Response({
+                'success': False,
+                'message': 'Invalid or expire token',
+            }, status=status.HTTP_401_UNAUTHORIZED)
