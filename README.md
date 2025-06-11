@@ -1,283 +1,195 @@
-# 🧠 Reddit Clone - Django REST API + React Frontend
+# 🔥 Reddit Clone – Backend API
 
-A full-stack Reddit-style blog post system using **Django REST Framework** as the backend API and **React.js** for the frontend. Supports JWT authentication, Google login via Allauth, and robust user registration with email or username.
-
----
-
-## 📁 Project Structure
-
-    |   +---public
-    |   |       vite.svg
-    |   |
-    |   \---src
-    |       |   App.jsx
-    |       |   main.jsx
-    |       |
-    |       \---assets
-    |           |   react.svg
-    |           |
-    |           \---css
-    |                   main.css
-    |
-    \---server
-        |   .env
-        |   db.sqlite3
-        |   manage.py
-        |   requirements.txt
-        |
-        +---apps
-        |   \---accounts
-        |       |   admin.py
-        |       |   apps.py
-        |       |   backend.py
-        |       |   models.py
-        |       |   serializer.py
-        |       |   tests.py
-        |       |   urls.py
-        |       |   views.py
-        |       |   __init__.py
-        |
-        \---server
-            |   asgi.py
-            |   db.sqlite3
-            |   urls.py
-            |   wsgi.py
-            |   __init__.py
-            |
-            +---settings
-            |   |   base.py
-            |   |   dev.py
-            |   |   prod.py
-            |   |
-            |   \---__pycache__
-            |           base.cpython-313.pyc
-            |           dev.cpython-313.pyc
-            |           settings.cpython-313.pyc
-            |
-            \---__pycache__
-                    settings.cpython-313.pyc
-                    urls.cpython-313.pyc
-                    wsgi.cpython-313.pyc
-                    __init__.cpython-313.pyc
-
+This is the backend API for a Reddit-like platform built with **Django REST Framework**, integrated with **React** as the frontend.
 
 ---
 
-## 🛠️ Features
+## ⚙️ Tech Stack
 
-- Custom user model with username, email, password, bio, avatar.
-- Email or username login support.
-- JWT authentication via `djangorestframework-simplejwt`.
-- Google login via Django Allauth + REST endpoints.
-- Full CRUD for posts and comments (React UI).
-- Token-based secure API endpoints.
+| Layer         | Technology                     |
+|---------------|-------------------------------|
+| Frontend      | React + Axios + Tailwind CSS   |
+| Backend       | Django + DRF + JWT (Custom)    |
+| OAuth         | Django AllAuth (Google Login)  |
+| Image Support | Pillow                         |
+| Database      | PostgreSQL                     |
 
 ---
 
-## setting up the Project (Front-end & Backend + google allAuth setup)
+## 🚀 Features
+
+### 🔐 Authentication
+- Register with email and password (username auto-generated)
+- Login with email or username + password
+- Google login via OAuth2
+- OTP support (for future)
+- Logout & account deletion
+- JWT token-based auth
+
+### 🧑 Profile
+- One-to-One profile model: bio, avatar
+- View/update profile
+- Password reset/change
+
+### 📚 Reddit Clone Features
+- Create/read posts
+- Comments (nested)
+- Voting system
+- Communities (subreddits)
+- Join/leave community
+- User profile view
+
+---
+
+## 📦 Setup Instructions
+
+### 🔽 Backend Setup
+
+1. **Clone the project:**
 
 ```bash
-⚙️ Backend Setup (Django + DRF)
+git clone https://github.com/your-username/reddit-clone-backend.git
+cd reddit-clone-backend
 
-1. Clone the repository
+2. Set up environment:
 
-git clone https://github.com/your-username/reddit-clone.git
-cd reddit-clone/server
 
-2. Create a virtual environment
 
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-3. Install dependencies
+3. Install requirements:
+
+
 
 pip install -r requirements.txt
 
-4. Set up .env file
+4. Configure .env file:
 
-Create a .env file in server/ directory:
 
-SECRET_KEY=your_django_secret_key
+
+SECRET_KEY=your_django_secret
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
 
-# Database
-DB_NAME=your_db
-DB_USER=your_db_user
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
+DATABASE_URL=your_postgres_url
 
-# Google Auth
 GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_SECRET=your_google_client_secret
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-5. Run migrations
+ALLOWED_HOSTS=127.0.0.1,localhost
+
+5. Apply migrations:
+
+
 
 python manage.py makemigrations
 python manage.py migrate
 
-6. Create superuser (admin)
+6. Create superuser:
+
+
 
 python manage.py createsuperuser
 
-7. Start backend server
+7. Start server:
+
+
 
 python manage.py runserver
 
 
 ---
 
-🌐 Frontend Setup (React)
+🔽 Frontend Setup (React)
 
-1. Navigate to frontend folder
+1. Navigate to frontend project:
 
-cd ../client
 
-2. Install frontend dependencies
+
+cd reddit-clone-frontend
+
+2. Install dependencies:
+
+
 
 npm install
 
-3. Create a .env file for React
+3. Start React app:
 
-REACT_APP_BACKEND_URL=http://127.0.0.1:8000
-REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
 
-4. Start React frontend
 
 npm start
 
+4. Axios config example:
+
+
+
+import axios from "axios";
+
+export const axiosInstance = axios.create({
+  baseURL: "http://localhost:8000/api/",
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
 
 ---
 
-🔐 Google Login Setup (with Allauth)
+🔑 Google OAuth Setup
 
 1. Go to Google Cloud Console
 
-Create a new project or use existing.
 
-Navigate to APIs & Services > Credentials
+2. Create a new project → OAuth consent screen
 
-Click + Create Credentials > OAuth Client ID
 
-Choose Web application
+3. Add credentials: OAuth Client ID
 
-Add redirect URI:
+
+4. Add redirect URIs:
+
+
 
 http://localhost:8000/accounts/google/login/callback/
+http://localhost:3000  # if using React dev server
 
-Add authorized JS origins:
-
-http://localhost:3000
-
-Save your Client ID and Client Secret and paste into .env
+5. Update .env:
 
 
-2. Update Django settings
 
-# Installed apps
-INSTALLED_APPS = [
-    ...
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    ...
-]
-
-# Add in settings.py
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-SITE_ID = 1
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
-# Google Provider
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-    }
-}
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
 
 
 ---
 
-🔗 API Endpoints
+🔌 API Endpoints
 
-Method	Endpoint	Description
+Endpoint	Method	Description
 
-POST	/api/register/	Register new user
-POST	/api/login/	Login with JWT
-POST	/api/token/refresh/	Refresh access token
-GET	/api/posts/	List all posts
-POST	/api/posts/	Create a new post
-GET	/api/profile/me/	Get current user data
+/api/register/	POST	Register a new user
+/api/login/	POST	Login user
+/api/logout/	POST	Logout user
+/api/delete-account/	DELETE	Delete user
+/api/profile/	GET	View user profile
+/api/profile/update/	PUT	Update profile
+/api/posts/	GET/POST	Post list or create
+/api/posts/:id/	GET	Retrieve post
+/api/comments/:post_id/	POST	Add comment to post
+/api/communities/	GET/POST	Community list/create
+/api/token/verify/	POST	Verify JWT token
 
 
 
 ---
 
-🔍 Testing
+🧑‍💻 Author
 
-Run Django tests:
+Name: Nelson
 
-python manage.py test
+Role: Backend Developer
 
+GitHub: github.com/Nelson19so 
 
----
-
-✅ Deployment Notes
-
-Use Gunicorn + Nginx for production backend
-
-Use .env.production in React
-
-Secure keys with environment variables
-
-Configure CORS and CSRF properly
-
-
-
----
-
-🤝 Contributing
-
-Pull requests and contributions are welcome. Please open an issue first to discuss what you’d like to change.
-
-
----
-
-📜 License
-
-MIT License. See LICENSE.md file for details.
-
----
-
-✅ **Now you can:**
-1. Copy this entire content into your GitHub repo's `README.md`.
-2. Replace placeholders like `your_django_secret_key`, `your_google_client_id`, and GitHub repo link.
-3. Adjust anything project-specific like routes or API if needed.
-
-Let me know if you'd like a Markdown file version you can directly download.
-
-```
-
----
-
-## 💻 Tech Stack
-
-- **Backend**: Django, Django REST Framework, PostgreSQL, Simple JWT, Allauth
-- **Frontend**: React.js, Fetch API
-- **Authentication**: Custom JWT, Google OAuth2 via Allauth
-- **Deployment Ready**: Gunicorn, Nginx, .env based config
-
----
-
-## 📸 Preview
-
-![App Screenshot](link-to-screenshot.png)
+LinkedIn: https://www.linkedin.com/in/nelson-junior-700b67363?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
