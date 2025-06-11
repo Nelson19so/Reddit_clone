@@ -6,19 +6,20 @@ This is the backend API for a Reddit-like platform built with **Django REST Fram
 
 ## ⚙️ Tech Stack
 
-| Layer         | Technology                     |
-|---------------|-------------------------------|
-| Frontend      | React + Axios + Tailwind CSS   |
-| Backend       | Django + DRF + JWT (Custom)    |
-| OAuth         | Django AllAuth (Google Login)  |
-| Image Support | Pillow                         |
-| Database      | PostgreSQL                     |
+| Layer         | Technology                    |
+| ------------- | ----------------------------- |
+| Frontend      | React + Axios + Tailwind CSS  |
+| Backend       | Django + DRF + JWT (Custom)   |
+| OAuth         | Django AllAuth (Google Login) |
+| Image Support | Pillow                        |
+| Database      | PostgreSQL                    |
 
 ---
 
 ## 🚀 Features
 
 ### 🔐 Authentication
+
 - Register with email and password (username auto-generated)
 - Login with email or username + password
 - Google login via OAuth2
@@ -27,11 +28,13 @@ This is the backend API for a Reddit-like platform built with **Django REST Fram
 - JWT token-based auth
 
 ### 🧑 Profile
+
 - One-to-One profile model: bio, avatar
 - View/update profile
 - Password reset/change
 
-### 📚 Reddit Clone Features
+### 📚 Reddit Clone Features (CRUD)
+
 - Create/read posts
 - Comments (nested)
 - Voting system
@@ -190,6 +193,7 @@ Name: Nelson
 
 Role: Backend Developer
 
-GitHub: github.com/Nelson19so 
+GitHub: github.com/Nelson19so
 
 LinkedIn: https://www.linkedin.com/in/nelson-junior-700b67363?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
+```
