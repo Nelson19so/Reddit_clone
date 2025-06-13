@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from .serializers import CommentSerializer, CommunitySerializer
+from .serializers import CommentSerializer, CommunitySerializer, VoteSerializerCreate
 from .models import BlogPost, Comment, Community
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -107,3 +107,25 @@ class CommunityDetailView(generics.RetrieveAPIView):
     serializer_class = CommentSerializer
     lookup_field = 'slug'
 
+# create vote for post
+class BlogPostVoteApiView(generics.CreateAPIView):
+    serializer_class = VoteSerializerCreate
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, slug, *args, **kwargs):
+        post = generics.get_object_or_404(BlogPost, slug=slug)
+        user = request.user
+        serializer = self.get_serializer(
+            data=request.data, 
+            context={
+                'request': request, 'post': post, 
+                'user': user
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({
+            'success': True,
+            'message': 'You have successfully vote'
+        }, status=status.HTTP_200_OK)
+    

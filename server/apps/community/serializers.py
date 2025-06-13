@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Community, BlogPost, Comment
+from .models import Community, BlogPost, Comment, BlogPostVote
 
 # recursive filed for comment infinity nesting replies
 class RecursiveField(serializers.Serializer):
@@ -37,3 +37,29 @@ class CommunitySerializer(serializers.ModelSerializer):
         validated_data['owner'] = request.user
         return BlogPost.objects.create(**validated_data)
 
+# upvote and downvote serializer create
+class VoteSerializerCreate(serializers.ModelSerializer):
+
+    class Meta:
+        mode = BlogPostVote
+        fields = ['post', 'upvote', 'downvote']
+
+    def validate(self, data):
+        if data.get("upvote") and data.get("downvote"):
+            raise serializers.ValidationError("You can't upvote and downvote at the same time.")
+        return data
+
+    def create(self, validated_data):
+        user =self.context.get('user')
+        post = self.context.get('post')
+
+        vote, created = BlogPostVote.objects.update_or_create(
+            post=post,
+            user=user,
+            defaults=validated_data
+        )
+
+        return vote
+        
+
+    

@@ -30,8 +30,6 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='post_images/', null=True, blank=True)
-    upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
-    downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
     slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -43,6 +41,19 @@ class BlogPost(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+
+# Blog post vote model
+class BlogPostVote(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_vote')
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='blog_vote')
+    upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
+    downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
+
+    def __str__(self):
+        return self.post.title
+
+    class Meta:
+        unique_together = ('post', 'user')
 
 # blog post comment model
 class Comment(models.Model):
