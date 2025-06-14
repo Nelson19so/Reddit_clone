@@ -27,7 +27,7 @@ class CommunitySerializer(serializers.ModelSerializer):
         model = Community
         fields = ['id', 'slug', 'name', 'description', 'created_at', 'owner']
         read_only = ['id', 'slug', 'created_at']
-    
+
     def get_is_members(self, obj):
         request = self.context.get('request')
         return request.user in obj.members.all() if request.is_authenticated else False
@@ -62,4 +62,4 @@ class VoteSerializerCreate(serializers.ModelSerializer):
         return vote
         
 
-    
+# blog post create
