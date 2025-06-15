@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Community, BlogPost, Comment, BlogPostVote
+from django.utils.timezone import now
+from datetime import timedelta
 
 # recursive filed for comment infinity nesting replies
 class RecursiveField(serializers.Serializer):
@@ -35,7 +37,7 @@ class CommunitySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         validated_data['owner'] = request.user
-        return BlogPost.objects.create(**validated_data)
+        return Community.objects.create(**validated_data)
 
 # upvote and downvote serializer create
 class VoteSerializerCreate(serializers.ModelSerializer):
@@ -62,4 +64,53 @@ class VoteSerializerCreate(serializers.ModelSerializer):
         return vote
         
 
-# blog post create
+# blog post create serializer
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
+        fields = ['author', 'community', 'title', 'content', 'image']
+
+    # getting the blogpost author returning none if not author
+    def get_is_author(self, obj):
+        request = self.context.get('request')
+        return request.user if obj.author == request.user else None
+
+    # handling the user data validation
+    def validate(self, data):
+        author = self.context.get('author')
+        
+        # validating the length of the title
+        if len(data['title']) <= 5:
+            raise serializers.ValidationError({
+                'title': 'Title should be at least up to 5 characters in length'
+            })
+        
+        # validate the length of content
+        if len(data['content']) <= 5:
+            raise serializers.ValidationError({
+                'content': 'Content should be at least up to 5 characters in length'
+            })
+        
+        # restrict how often a user can post to prevent spamming
+        five_minute_ago = now() - timedelta(minutes=5)
+        
+        recent = BlogPost.objects.filter(
+            author=author, created_at=five_minute_ago
+        )
+        if recent.exists():
+            raise serializers.ValidationError(
+                "You're posting too frequently. Please wait a for 5 more minute to post"
+            )
+        
+    def validate_community(self, value):
+        user = self.context.get('author')
+
+        if not user in value.members.filter(id=user.id).exits():
+            raise serializers.ValidationError('You are not a member of this community.')
+        return value
+
+    # handles the user posting the bog on create
+    def create(self, validated_data):
+        return BlogPost.objects.get_or_create(**validated_data)
+

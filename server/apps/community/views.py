@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from .serializers import CommentSerializer, CommunitySerializer, VoteSerializerCreate
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
+from .serializers import (CommentSerializer, CommunitySerializer, VoteSerializerCreate, BlogPostSerializer)
 from .models import BlogPost, Comment, Community
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import Http404
 
 # Blog post comment view create
 class PostCommentView(generics.CreateAPIView):
@@ -43,8 +44,23 @@ class CommunityViewCreate(APIView):
 
 # Delete and update community view
 class CommunityUpdateDelete(APIView):
+    permission_classes = [IsAuthenticated]
+    
     # handles update
     def put(self, request, slug):
+        community = get_object_or_404(Community, slug=slug)
+        if community.owner != request.user:
+            return Response({
+                'message': 'Not authorized',
+                'success': False
+            }, status=status.HTTP_403_FORBIDDEN)
+        serializer = CommunitySerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # handles update
+    def patch(self, request, slug):
         community = get_object_or_404(Community, slug=slug)
         if community.owner != request.user:
             return Response({
@@ -95,6 +111,7 @@ class LeaveCommunityView(APIView):
 
 # community list view
 class CommunityListView(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
         communities = Community.objects.all()
@@ -103,6 +120,7 @@ class CommunityListView(APIView):
 
 # community detail
 class CommunityDetailView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Community.objects.all()
     serializer_class = CommentSerializer
     lookup_field = 'slug'
@@ -118,8 +136,8 @@ class BlogPostVoteApiView(generics.CreateAPIView):
         serializer = self.get_serializer(
             data=request.data, 
             context={
-                'request': request, 'post': post, 
-                'user': user
+                'post': post, 'user': user,
+                'request': request,
             }
         )
         serializer.is_valid(raise_exception=True)
@@ -128,4 +146,105 @@ class BlogPostVoteApiView(generics.CreateAPIView):
             'success': True,
             'message': 'You have successfully vote'
         }, status=status.HTTP_200_OK)
+
+# blog post create api view
+class BloPostCreateApiView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BlogPostSerializer
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        slug = self.kwargs.get('slug')
+        community = generics.get_object_or_404(Community, slug=slug)
+        return serializer.save(author=author, community=community)
+
+    # handle post request from users
+    def post(self, request, *args, **kwargs):
+        author = request.user
+        serializer = self.get_serializer(data=request.data, context={
+            'author': author, 'request': request
+        })
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            'success': True,
+            'message': 'You have successfully posted a blog post',
+        }, status=status.HTTP_200_OK)
+
+# blog post update and delete api view
+class BlogPostUpdateDeleteApiView(APIView):
+    permission_classes = [IsAuthenticated]
     
+    def get_object(self, slug):
+        try:
+            return BlogPost.objects.get(slug=slug)
+        except BlogPost.DoesNotExist():
+            return Http404
+    
+    # replace an existing data with a new one (put)
+    def put(self, request, slug, format=None):
+        blogpost = self.get_object(slug)
+        serializer = BlogPostSerializer(blogpost, data=request.data)
+        if request.user == blogpost.author:
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    'success': True,
+                    'message': 'You have successfully updated your blog post',
+                }, serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    # replace some of the existing data with a new one (patch)
+    def patch(self, request, slug, format=None):
+        blogpost = self.get_object(slug)
+        serializer = BlogPostSerializer(blogpost, data=request.data)
+        if request.user == blogpost.author:
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    'success': True,
+                    'message': 'You have successfully updated your blog post',
+                }, serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
+    # user delete blog post
+    def delete(self, request, slug, format=None):
+        blogpost = self.get_object(slug)
+        if request.user == blogpost.author:
+            blogpost.delete()
+            return Response({
+                'success': True,
+                'message': 'You have successfully delete your blog post',
+            }, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+# general blog post list for all users
+class BlogPostListApiView(generics.ListAPIView):
+    queryset = BlogPost.objects.all().order_by('created_at').prefetch_related('blog_vote')
+    serializer_class = BlogPostSerializer
+    permission_classes = [AllowAny]
+
+# list community blog post
+class CommunityBlogPostListApiView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # re-usable component to get blogpost
+    def get_object(self, community_slug, community):
+        try:
+            return BlogPost.objects.filter(community=community)
+        except BlogPost.DoesNotExist():
+            return Http404
+
+    # listing all blogpost related to a community
+    def get(self, request, community_slug):
+        try:
+            community = Community.objects.get(slug=community_slug)
+            blogpost = self.get_object(community)
+        except Community.DoesNotExist:
+            community = Community.objects.none()
+
+        serializer = CommunitySerializer(blogpost, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+            

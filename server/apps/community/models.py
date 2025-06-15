@@ -39,7 +39,12 @@ class BlogPost(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            num = 1
+            while BlogPost.objects.filter(slug=base_slug):
+                self.slug = f'{base_slug}{num}'
+                num += 1
+            self.slug = base_slug
         return super().save(*args, **kwargs)
 
 # Blog post vote model
@@ -54,6 +59,14 @@ class BlogPostVote(models.Model):
 
     class Meta:
         unique_together = ('post', 'user')
+
+    @property
+    def blog_post_upvote_count(self):
+        return self.upvote.all if self.upvote else None
+
+    @property
+    def blog_post_downvote_count(self):
+        return self.downvote.all if self.downvote else None
 
 # blog post comment model
 class Comment(models.Model):
