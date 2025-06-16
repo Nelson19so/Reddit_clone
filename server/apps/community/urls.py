@@ -14,7 +14,7 @@ urlpatterns = [
     path('update_delete/', CommunityUpdateDelete.as_view(), name='community_updated_delete'),
     path('create/', CommunityViewCreate.as_view(), name='community_create'),
     path('blogpost/vote/<slug:slug>/', BlogPostVoteApiView.as_view(), name='blogpost_vote'),
-    path('blogpost/create/<slug:slug>', BloPostCreateApiView.as_view(), name='blog_post_view'),
+    path('blogpost/create/<slug:slug>/', BloPostCreateApiView.as_view(), name='blog_post_view'),
     path(
         'blogpost/update_delete/<slug:slug>', 
         BlogPostUpdateDeleteApiView.as_view(), name='update_delete_blogpost'

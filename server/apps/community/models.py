@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 User = get_user_model()
 
@@ -23,10 +24,35 @@ class Community(models.Model):
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
+# blog post category model
+class BlogPostCategory(models.Model):
+    CATEGORY = [
+        ('TOP', 'top'),
+        ('HOT', 'hot'),
+        ('NEW', 'new'),
+        ('RISING', 'rising'),
+        ('CONTROVERSIAL', 'controversial'),
+        ('GILDED', 'gilded'),
+        ('PROMOTED', 'promoted'),
+    ]
+
+    category = models.CharField(max_length=50, blank=False, null=False, choices=CATEGORY)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.date_updated = now()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.category
+
 # blog post model
 class BlogPost(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts'
+    )
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='post_images/', null=True, blank=True)
@@ -51,8 +77,13 @@ class BlogPost(models.Model):
 class BlogPostVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_vote')
     post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='blog_vote')
+    category = models.ForeignKey(
+        BlogPostCategory, on_delete=models.PROTECT, 
+        related_name='blog_category', null=True, blank=True
+    )
     upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
     downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.post.title

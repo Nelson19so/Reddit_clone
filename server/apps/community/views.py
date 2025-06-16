@@ -226,7 +226,7 @@ class BlogPostListApiView(generics.ListAPIView):
     serializer_class = BlogPostSerializer
     permission_classes = [AllowAny]
 
-# list community blog post
+# list community blog post for user
 class CommunityBlogPostListApiView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -247,4 +247,17 @@ class CommunityBlogPostListApiView(APIView):
 
         serializer = CommunitySerializer(blogpost, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-            
+
+# displays community for members in community for authenticated users
+class DisplayMembersCommunity(APIView):
+    authentication_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        community = Community.objects.filter(members=user)
+        if community.exists():
+            serializer = CommunitySerializer(community, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'No subreddit found yet',
+        }, status=status.HTTP_404_NOT_FOUND)
