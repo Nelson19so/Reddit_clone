@@ -8,12 +8,12 @@ env/
 *.log
 
 # Django
-db.sqlite3
+# db.sqlite3
 *.pot
 *.pyc
 *.pyo
 *.pyd
-*.db
+# *.db
 .DS_Store
 media/
 staticfiles/
@@ -39,5 +39,10 @@ coverage.xml
 .tox/
 
 # migrations
-**/migrations/
+**/migrations/*.py
 !*/migrations/__init__.py
+
+**/migrations/__pycache__/
+**/migrations/*.pyc
+**/migrations/*.pyo
+**/migrations/*.pyd
