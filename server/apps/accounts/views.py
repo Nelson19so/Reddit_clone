@@ -157,7 +157,7 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
         }, status=status.HTTP_204_NO_CONTENT)
 
 # token verify api view
-class TokenVerifyView(APIView):
+class UserTokenVerifyView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

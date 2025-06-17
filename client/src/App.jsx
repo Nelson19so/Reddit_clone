@@ -1,8 +1,15 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/auth/Login";
+
 function App() {
   return (
-    <>
-      <h1 className="text-fuchsia-700">Hello world</h1>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* Public Route */}
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
