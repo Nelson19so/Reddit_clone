@@ -10,8 +10,7 @@ CORS_ALLOWED_ORIGINS = [
 
 # ALLOWED HOST for production mode
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1'
+    'reddit-clone-5uvr.onrender.com'
 ]
 
 # Database
