@@ -20,7 +20,7 @@ This is the backend API for a Reddit-like platform built with **Django REST Fram
 
 ### 🔐 Authentication
 
-- Register with email and password (username auto-generated)
+- Register with email and password (username auto-generated from email)
 - Login with email or username + password
 - Google login via OAuth2
 - OTP support (for future)
