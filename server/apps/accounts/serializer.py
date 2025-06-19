@@ -42,7 +42,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password': 'Passwords do not match'})
         
         # validate all fields must be required if any empty field
-        if not data['password'] or data['confirm_password'] or data['email']:
+        if not data['password'] or not data['confirm_password'] or not data['email']:
             raise serializers.ValidationError({'fields': 'All fields are required'})
 
         # returns the data for user
