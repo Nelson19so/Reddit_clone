@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializer import UserProfileViewSerializer, UserRegistrationSerializer, UserLoginSerializerCreate
 from django.contrib.auth import get_user_model, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from .models import CustomUser
+from rest_framework_simplejwt.views import TokenRefreshView
 
 # defining the user
 User = get_user_model()
@@ -128,12 +129,12 @@ class LogOutUserView(APIView):
             }, status=status.HTTP_205_RESET_CONTENT)
         except TokenError:
             return Response({
-                'success': True,
+                'success': False,
                 'message': 'Invalid token'
             }, status=status.HTTP_400_BAD_REQUEST)
         except KeyError:
             return Response({
-                'success': True,
+                'success': False,
                 'message': 'Refresh token is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -161,7 +162,7 @@ class UserTokenVerifyView(APIView):
     def post(self, request):
         token = request.data.get('token')
         try:
-            AccessToken(token)
+            token = AccessToken(token)
             return Response({
                 'message': 'Token is valid',
                 'success': True,
@@ -171,3 +172,19 @@ class UserTokenVerifyView(APIView):
                 'success': False,
                 'message': 'Invalid or expire token',
             }, status=status.HTTP_401_UNAUTHORIZED)
+
+# custom JWT refreshed access token for user
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            return Response({
+                'success': True,
+                'access_token': response.data['access']
+            }, status=status.HTTP_200_OK)
+        except InvalidToken:
+            return Response({
+                'success': False,
+                'message': 'Invalid or expired refresh token'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
