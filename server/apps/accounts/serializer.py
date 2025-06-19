@@ -92,6 +92,7 @@ class UserLoginSerializerCreate(serializers.Serializer):
         if user is None:
             raise serializers.ValidationError('Invalid credentials')
         # returns user for later use in view
-        return user
+        data['user'] = user
+        return data
 
 

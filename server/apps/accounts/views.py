@@ -83,8 +83,6 @@ class UserLoginViewCreate(APIView):
         if serializer.is_valid():
             # getting the validated user data
             user = serializer.validated_data['user']
-            # log user in
-            login(request, user)
 
             # refreshes token for user
             refresh = RefreshToken.for_user(user)
@@ -109,7 +107,7 @@ class UserLoginViewCreate(APIView):
         # returns a json response if the use fails
         return Response({
             'success': False,
-            'message': serializer.errors
+            'errors': serializer.errors
         }, status=status.HTTP_404_NOT_FOUND)
 
 # user log out view for user 
