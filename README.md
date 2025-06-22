@@ -6,13 +6,13 @@ This is the backend API for a Reddit-like platform built with **Django REST Fram
 
 ## ⚙️ Tech Stack
 
-| Layer         | Technology                    |
-| ------------- | ----------------------------- |
-| Frontend      | React + Axios + Tailwind CSS  |
-| Backend       | Django + DRF + JWT (Custom)   |
-| OAuth         | Django AllAuth (Google Login) |
-| Image Support | Pillow                        |
-| Database      | PostgreSQL                    |
+| Layer         | Technology                          |
+| ------------- | ----------------------------------- |
+| Frontend      | React + Axios + Tailwind CSS + scss |
+| Backend       | Django + DRF + JWT (Custom)         |
+| OAuth         | Django AllAuth (Google Login)       |
+| Image Support | Pillow                              |
+| Database      | PostgreSQL                          |
 
 ---
 

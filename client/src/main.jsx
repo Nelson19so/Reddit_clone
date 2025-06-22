@@ -4,12 +4,13 @@ import App from "./App.jsx";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
+import Reddit from "./pages/reddit/Reddit.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* Public Route */}
+        <Route path="/" element={<Reddit />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>

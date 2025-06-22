@@ -1,1 +1,112 @@
-@import "tailwindcss";
+body,
+html {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  width: 100vw;
+  margin: 0;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.__container-navbar {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+}
+.__container-navbar .container-top-navbar p {
+  text-align: left;
+  font-weight: 600;
+  font-size: 17px;
+}
+.__container-navbar .category_list_for_navbar {
+  background-color: #e5e5e5;
+}
+.__container-navbar .category_list_for_navbar ul .active-link a {
+  border-bottom: 2px solid #ff4500;
+  color: #ff4500 !important;
+}
+.__container-navbar .category_list_for_navbar ul li a {
+  display: block;
+  padding: 10px 25px;
+  font-size: 12px;
+  transition: 0.5s;
+  color: #414141;
+}
+.__container-navbar .category_list_for_navbar ul li a:hover {
+  color: #ff4500;
+}
+.__container-navbar .category_list_for_navbar ul li a:focus {
+  border-bottom: 2px solid #ff4500;
+  color: #ff4500;
+}
+
+.container_sidebar {
+  width: 256px;
+  border-right: 1px solid #e5e5e5;
+  height: 100vh;
+}
+.container_sidebar aside {
+  width: 100%;
+  height: 100%;
+}
+.container_sidebar aside .container-article {
+  border-bottom: 1px solid #e5e5e5;
+}
+.container_sidebar aside .container-search-nav-and-links-items {
+  flex: 1;
+}
+.container_sidebar aside .container-search-nav-and-links-items .wrapper {
+  border: 1px solid #e5e5e5;
+  align-items: center;
+  border-radius: 2px;
+}
+.container_sidebar aside .container-search-nav-and-links-items .wrapper input {
+  outline: none;
+  color: #4b4b4b;
+  font-size: 14px;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li {
+  font-size: 14px;
+  font-weight: 500;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li .active {
+  display: block;
+  color: #ff4500;
+  background-color: #e5e5e5;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li .main-link div {
+  align-items: center;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li .main-link:hover {
+  display: block;
+  background-color: #e5e5e5;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li a {
+  display: block;
+}
+.container_sidebar aside .container-search-nav-and-links-items .container-links ul li a div {
+  align-items: center;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-bottom-container {
+  height: fit-content;
+  border-top: 1px solid #e5e5e5;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-bottom-container ul li {
+  font-size: 14px;
+  font-weight: 500;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-bottom-container ul li a {
+  display: block;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-bottom-container ul li a div {
+  align-items: center;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-bottom-container ul li a div div {
+  align-items: center;
+}
+
+/*# sourceMappingURL=main.css.map */
