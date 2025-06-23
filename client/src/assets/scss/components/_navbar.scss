@@ -1,0 +1,137 @@
+@use "../base/global.scss" as theme;
+
+.__container-navbar {
+  width: 100%;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+  background-color: #ffff;
+
+  .container-top-navbar-mobile {
+    align-items: center;
+
+    @media only screen and (min-width: 1061px) {
+      display: none;
+    }
+  }
+
+  .container-top-navbar {
+    align-items: center;
+
+    @media only screen and (max-width: 1061px) {
+      display: none;
+    }
+
+    p {
+      text-align: left;
+      font-weight: 500;
+      font-size: 22px;
+    }
+
+    .container_sub_subscribe {
+      align-items: center;
+      background-color: #a2a2a2;
+      border-radius: 20px;
+      padding: 0 6px;
+      padding-left: 10px;
+      font-size: 14px;
+      color: white;
+
+      button {
+        display: block;
+        padding: 5px;
+        border-radius: 100px;
+        background-color: #363636;
+      }
+    }
+  }
+
+  .category_list_for_navbar {
+    background-color: #f3f3f3;
+    position: relative;
+
+    .container-filter-mobile {
+      padding: 15px 23px;
+
+      p {
+        font-weight: 500;
+
+        span {
+          color: #ff4500;
+        }
+      }
+
+      @media only screen and (min-width: 1061px) {
+        display: none;
+      }
+    }
+
+    ul {
+      @media only screen and (max-width: 1061px) {
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        padding: 15px 0;
+        background-color: #ffffff;
+        display: block;
+        gap: 0;
+        position: absolute;
+      }
+
+      @media only screen and (min-width: 1061px) {
+        .active-link {
+          a {
+            border-bottom: 2px solid #ff4500;
+            color: #ff4500 !important;
+          }
+        }
+      }
+
+      li {
+        @media only screen and (max-width: 1061px) {
+          width: 100%;
+        }
+
+        a {
+          display: block;
+          padding: 15px 35px;
+          font-size: 12px;
+          transition: 0.5s;
+          color: #414141;
+
+          @media only screen and (max-width: 1061px) {
+            padding: 7px 0px;
+            padding-left: 25px;
+            padding-right: 68px;
+            font-weight: 600;
+            width: 100%;
+
+            &:hover {
+              background-color: #f3f3f3;
+            }
+
+            &:focus {
+              background-color: #f3f3f3;
+            }
+          }
+
+          @media only screen and (min-width: 1061px) {
+            &:hover {
+              color: #ff4500;
+            }
+
+            &:focus {
+              border-bottom: 2px solid #ff4500;
+              color: #ff4500;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .container-mobile-display {
+    border: 1px solid #e5e5e5;
+
+    @media only screen and (min-width: 1061px) {
+      display: none;
+    }
+  }
+}

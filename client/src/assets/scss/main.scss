@@ -1,4 +1,8 @@
-@use "./base/global.scss" as global;
+@use "./components/button" as button;
 
-@use "./components/navbar.scss" as navbar;
-@use "./components/sidebar.scss";
+@use "./base/global" as global;
+@use "./base/theme" as theme;
+
+@use "./components/navbar" as navbar;
+@use "./components/sidebar" as sidebar;
+@use "./components/post" as post;

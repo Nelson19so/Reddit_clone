@@ -91,7 +91,7 @@ class UserLoginViewCreate(APIView):
             # returns json response once the user is log in
             return Response({
                 'success': True,
-                'message': 'You have successfully been login',
+                'message': 'You have successfully login',
                 # passing te user data
                 'user': {
                     'id': user.id,
@@ -152,7 +152,7 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
         user.delete()
         return Response({
             'success': True,
-            'message': 'User Created successfully',
+            'message': 'User deleted successfully',
         }, status=status.HTTP_204_NO_CONTENT)
 
 # token verify api view

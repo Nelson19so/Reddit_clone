@@ -1,0 +1,23 @@
+body,
+html {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  width: 100vw;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #f6f6f6;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.my-masonry-grid_column {
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 1.5rem;
+}

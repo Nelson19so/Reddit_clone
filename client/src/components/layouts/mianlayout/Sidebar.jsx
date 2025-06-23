@@ -13,9 +13,9 @@ export default function Sidebar() {
         </div>
 
         <div className="container-article p-4">
-          <Link>
-            <div className="flex justify-between gap-5">
-              <p className="text-[14px]">kikoherrsc@gmail.com</p>
+          <div className="flex justify-between gap-5">
+            <p className="text-[14px]">kikoherrsc@gmail.com</p>
+            <button className="cursor-pointer">
               <svg
                 width="24"
                 height="25"
@@ -31,12 +31,12 @@ export default function Sidebar() {
                   fill-opacity="0.87"
                 />
               </svg>
-            </div>
-          </Link>
+            </button>
+          </div>
         </div>
 
         <div className="container-search-nav-and-links-items">
-          <div className="p-4">
+          <div className="pl-4 pr-4 pt-2 pb-2">
             <div className="wrapper flex justify-between pl-3 pr-3 ">
               <div>
                 <svg
@@ -67,11 +67,11 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <div className="flex justify-between flex-col h-[86.1%]">
+          <div className="sidebar-items__ flex justify-between flex-col h-[89.2%]">
             <div className="container-links">
               <ul className="flex justify-items-start gap-1 flex-col">
                 <li>
-                  <Link className="pl-4 pr-4 pt-2 pb-2 active main-link">
+                  <Link to="/" className="pl-4 pr-4 pt-2 pb-2 active main-link">
                     <div className="flex justify-start gap-3">
                       <svg
                         width="24"
@@ -164,7 +164,7 @@ export default function Sidebar() {
             <div className="sidebar-bottom-container pt-2 pb-2">
               <ul>
                 <li className="pl-4 pr-3 pt-2 pb-2">
-                  <Link>
+                  <button className="cursor-pointer w-[100%]">
                     <div className="flex justify-items-start gap-4 w-[100%]">
                       <svg
                         width="24"
@@ -204,11 +204,11 @@ export default function Sidebar() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </button>
                 </li>
 
                 <li className="pl-4 pr-3 pt-2 pb-2">
-                  <Link>
+                  <button className="cursor-pointer w-[100%]">
                     <div className="flex justify-items-start gap-4 w-[100%]">
                       <svg
                         width="24"
@@ -243,11 +243,11 @@ export default function Sidebar() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </button>
                 </li>
 
                 <li className="pl-4 pr-3 pt-2 pb-2">
-                  <Link>
+                  <button className="cursor-pointer w-[100%]">
                     <div className="flex justify-items-start gap-4 w-[100%]">
                       <svg
                         width="24"
@@ -282,7 +282,7 @@ export default function Sidebar() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>

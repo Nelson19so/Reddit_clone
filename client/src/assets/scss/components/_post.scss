@@ -1,0 +1,41 @@
+.reddit_post {
+  .title {
+    font-size: 15px;
+    width: auto;
+  }
+  .__post-about {
+    color: #414141;
+    font-size: 12px;
+
+    .author {
+      display: inline;
+      color: #ff4500;
+    }
+  }
+
+  .group-name {
+    color: #ff4500;
+    font-size: 12px;
+
+    span {
+      display: inline;
+      color: #414141;
+    }
+  }
+
+  .__post-detail-container {
+    align-items: center;
+
+    .number__ {
+      color: #414141;
+      font-size: 13px;
+    }
+
+    a {
+      display: block;
+      padding: 10px;
+      border-radius: 100px;
+      background-color: #e5e5e5;
+    }
+  }
+}
