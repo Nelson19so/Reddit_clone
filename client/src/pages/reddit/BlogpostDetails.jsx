@@ -4,7 +4,7 @@ function BlogpostDetails() {
   return (
     <Layout>
       <div className="container-articles">Hello blog details</div>
-      <button className="__add-or-comment fixed bottom-5 right-5">
+      <button className="__add-or-comment fixed bottom-5 right-5 cursor-pointer">
         <svg
           width="24"
           height="24"

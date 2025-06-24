@@ -97,7 +97,7 @@ html {
     padding: 15px 0;
     background-color: #ffffff;
     display: block;
-    gap: 0;
+    gap: 3px;
     position: absolute;
   }
 }

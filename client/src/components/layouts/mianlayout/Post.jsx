@@ -22,7 +22,7 @@ export default function Post({ title, subreddit, author, img, slug }) {
         <img src={img} alt={author} className="w-full h-auto object-cover" />
       )}
       <article className="p-4">
-        <Link to={`/blogpost/${slug}`}>
+        <Link to={`/blogpost_details/${slug}`}>
           <p className="title">{title}</p>
         </Link>
         <span className="__post-about">

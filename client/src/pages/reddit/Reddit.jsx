@@ -10,6 +10,8 @@ import maskGroup4 from "../../assets/images/Mask_Group4.png";
 import Post from "../../components/layouts/mianlayout/Post";
 
 function Reddit() {
+  document.title = "Reddit blog list";
+
   const posts = [
     {
       id: 1,
@@ -89,7 +91,8 @@ function Reddit() {
           </Masonry>
         </div>
       </div>
-      <button className="__add-or-comment fixed bottom-5 right-5">
+
+      <button className="__add-or-comment fixed bottom-5 right-5 cursor-pointer">
         <svg
           width="24"
           height="24"

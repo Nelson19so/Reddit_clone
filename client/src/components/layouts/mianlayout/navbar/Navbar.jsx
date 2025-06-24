@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import logo from "../../../../assets/images/reddit-1.png";
-import { useEffect, useState } from "react";
 
 export default function Nav() {
   const [homepage, setIsHome] = useState(true);
@@ -33,7 +33,9 @@ export default function Nav() {
                 />
               </svg>
             </button>
-            <img src={logo} alt="logo" />
+            <Link to="/">
+              <img src={logo} alt="logo" />
+            </Link>
           </div>
 
           <div className="container-search-mobile">
