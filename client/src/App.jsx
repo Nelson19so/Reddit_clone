@@ -1,5 +1,14 @@
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 function App() {
-  return <h1>Hello</h1>;
+  const [homepage, setIsHome] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsHome(location.pathname === "/");
+  }, [location]);
+  return <></>;
 }
 
 export default App;

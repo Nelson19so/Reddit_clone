@@ -63,9 +63,12 @@ export default function Nav() {
             {homepage ? (
               <p>All subreddits</p>
             ) : (
-              <>
+              <div
+                className="flex justify-start gap-4 align-middle"
+                style={{ alignItems: "center" }}
+              >
                 <Link to={-1}>
-                  <button className="cursor-pointer">
+                  <button className="cursor-pointer flex justify-center">
                     <svg
                       width="24"
                       height="24"
@@ -82,7 +85,7 @@ export default function Nav() {
                   </button>
                 </Link>
                 <p>Today I Learned</p>
-              </>
+              </div>
             )}
             <div className="container_sub_subscribe flex justify-start gap-3">
               Subreddit subscribed

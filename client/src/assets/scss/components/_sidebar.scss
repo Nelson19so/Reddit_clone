@@ -59,6 +59,15 @@
 
               a {
                 display: block;
+                transition: 0.4s;
+                animation: 0.4s ease-in-out;
+
+                svg {
+                  path {
+                    transition: 0.4s;
+                    animation: 0.4s ease-in-out;
+                  }
+                }
 
                 div {
                   align-items: center;

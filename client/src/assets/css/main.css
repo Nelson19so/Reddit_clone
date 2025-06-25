@@ -203,6 +203,12 @@ html {
 }
 .container_sidebar aside .container-search-nav-and-links-items .sidebar-items__ .container-links ul li a {
   display: block;
+  transition: 0.4s;
+  animation: 0.4s ease-in-out;
+}
+.container_sidebar aside .container-search-nav-and-links-items .sidebar-items__ .container-links ul li a svg path {
+  transition: 0.4s;
+  animation: 0.4s ease-in-out;
 }
 .container_sidebar aside .container-search-nav-and-links-items .sidebar-items__ .container-links ul li a div {
   align-items: center;

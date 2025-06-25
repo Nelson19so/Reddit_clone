@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../../assets/images/reddit-1.png";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
+  const location = useLocation();
+  const [home, setIsHomePage] = useState(false);
+
+  useEffect(() => {
+    setIsHomePage(location.pathname === "/");
+  }, [location]);
   return (
     <div className="container_sidebar w-[256px]">
       <aside className="h-[100%] flex justify-baseline flex-col">
@@ -71,7 +78,12 @@ export default function Sidebar() {
             <div className="container-links">
               <ul className="flex justify-items-start gap-1 flex-col">
                 <li>
-                  <Link to="/" className="pl-4 pr-4 pt-2 pb-2 active main-link">
+                  <Link
+                    to="/"
+                    className={`pl-4 pr-4 pt-2 pb-2 main-link ${
+                      home && "active"
+                    }`}
+                  >
                     <div className="flex justify-start gap-3">
                       <svg
                         width="24"
@@ -82,7 +94,8 @@ export default function Sidebar() {
                       >
                         <path
                           d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z"
-                          fill="#FF4500"
+                          fill={home ? "#FF4500" : "black"}
+                          fill-opacity={home ? "" : "0.54"}
                         />
                       </svg>
                       Home
