@@ -5,11 +5,11 @@ import Sidebar from "./mianlayout/Sidebar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="__reddit-page flex">
+    <div className="__reddit-page">
       <div className="container-sidebar__">
         <Sidebar />
       </div>
-      <div className="container-main-page__ w-[100%]">
+      <div className="container-main-page__">
         <Nav />
         <div className="container-articles-items">{children}</div>
       </div>

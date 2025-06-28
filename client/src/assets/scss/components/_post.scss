@@ -22,20 +22,21 @@
       color: #414141;
     }
   }
+}
 
-  .__post-detail-container {
-    align-items: center;
+.__post-detail-container {
+  align-items: center;
 
-    .number__ {
-      color: #414141;
-      font-size: 13px;
-    }
+  .number__ {
+    color: #414141;
+    font-size: 13px;
+  }
 
-    a {
-      display: block;
-      padding: 10px;
-      border-radius: 100px;
-      background-color: #e5e5e5;
-    }
+  a {
+    display: block;
+    padding: 10px;
+    border-radius: 100px;
+    background-color: #e5e5e5;
+    width: fit-content;
   }
 }

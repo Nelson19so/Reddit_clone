@@ -23,12 +23,48 @@ html {
   box-sizing: border-box;
 }
 
+.__reddit-page {
+  display: flex;
+  justify-content: space-between;
+}
+.__reddit-page .container-main-page__ {
+  width: 100vw;
+}
+@media only screen and (min-width: 1061px) {
+  .__reddit-page .container-main-page__ {
+    width: calc(100vw - 256px);
+  }
+}
+
 .my-masonry-grid_column {
   background-clip: padding-box;
 }
 
 .my-masonry-grid_column > div {
   margin-bottom: 1.5rem;
+}
+
+.font-grey {
+  color: #828282;
+  font-size: 13px;
+}
+.font-grey a,
+.font-grey span {
+  color: #ff4500;
+}
+
+.font-dark {
+  color: #000000;
+  font-size: 13px;
+}
+.font-dark a,
+.font-dark span {
+  color: #ff4500;
+}
+
+.load-more__ {
+  font-size: 12px;
+  color: #ff4500;
 }
 
 .__container-navbar {
@@ -75,7 +111,13 @@ html {
 }
 .__container-navbar .category_list_for_navbar {
   background-color: #f3f3f3;
-  position: relative;
+  right: 0;
+  width: 100%;
+}
+@media only screen and (max-width: 1061px) {
+  .__container-navbar .category_list_for_navbar {
+    position: relative;
+  }
 }
 .__container-navbar .category_list_for_navbar .container-filter-mobile {
   padding: 15px 23px;
@@ -157,6 +199,8 @@ html {
   border-right: 1px solid #e5e5e5;
   height: 100vh;
   left: 0;
+  top: 0;
+  position: fixed;
   background-color: white;
 }
 @media only screen and (max-width: 1061px) {
@@ -251,18 +295,20 @@ html {
   display: inline;
   color: #414141;
 }
-.reddit_post .__post-detail-container {
+
+.__post-detail-container {
   align-items: center;
 }
-.reddit_post .__post-detail-container .number__ {
+.__post-detail-container .number__ {
   color: #414141;
   font-size: 13px;
 }
-.reddit_post .__post-detail-container a {
+.__post-detail-container a {
   display: block;
   padding: 10px;
   border-radius: 100px;
   background-color: #e5e5e5;
+  width: fit-content;
 }
 
 /*# sourceMappingURL=main.css.map */

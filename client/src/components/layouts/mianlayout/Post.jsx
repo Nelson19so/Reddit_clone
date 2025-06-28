@@ -37,6 +37,7 @@ export default function Post({ title, subreddit, author, img, slug }) {
         </p>
 
         <div className="__post-detail-container flex justify-around mt-1">
+          {/* blog post vote */}
           <div className="flex justify-center flex-col">
             <svg
               width="20"
@@ -68,6 +69,8 @@ export default function Post({ title, subreddit, author, img, slug }) {
               />
             </svg>
           </div>
+
+          {/* total number of comment */}
           <div className="flex justify-center gap-2">
             <svg
               width="20"
@@ -84,6 +87,8 @@ export default function Post({ title, subreddit, author, img, slug }) {
             </svg>
             <span className="number__">1281</span>
           </div>
+
+          {/* share link */}
           <div>
             <Link onClick={handleShare}>
               <svg
