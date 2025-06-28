@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Login() {
+function Register() {
   return (
     <>
       <link
@@ -13,12 +13,12 @@ function Login() {
         <div class="frame">
           <div class="nav">
             <ul className="links">
-              <li class="signin-active">
+              <li>
                 <Link to="/login" class="btn">
                   Sign in
                 </Link>
               </li>
-              <li class="signup-inactive">
+              <li class="signup-active">
                 <Link to="/signup" class="btn">
                   Sign up
                 </Link>
@@ -26,12 +26,19 @@ function Login() {
             </ul>
           </div>
           <div>
-            <form class="form-signin" action="" method="post" name="form">
-              <label for="username">Username</label>
+            <form class="form-signup" action="" method="post" name="form">
+              {/* <label for="fullname">Full name</label> */}
+              {/* <input
+                class="form-styling"
+                type="text"
+                name="fullname"
+                placeholder=""
+              /> */}
+              <label for="email">Email</label>
               <input
                 class="form-styling"
                 type="text"
-                name="username"
+                name="email"
                 placeholder=""
               />
               <label for="password">Password</label>
@@ -41,18 +48,23 @@ function Login() {
                 name="password"
                 placeholder=""
               />
-              <input type="checkbox" id="checkbox" />
-              <label for="checkbox">
-                <span class="ui"></span>Keep me signed in
-              </label>
-              <div class="btn-animate">
-                <a class="btn-signin">Sign in</a>
-              </div>
+              <label for="confirmpassword">Confirm password</label>
+              <input
+                class="form-styling"
+                type="text"
+                name="confirmpassword"
+                placeholder=""
+              />
+              <a class="btn-signup">Sign Up</a>
             </form>
+          </div>
+
+          <div class="forgot">
+            <a href="#">Forgot your password?</a>
           </div>
         </div>
       </div>
     </>
   );
 }
-export default Login;
+export default Register;
