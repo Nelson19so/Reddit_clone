@@ -8,7 +8,7 @@ from .views import (
 
 # api url configuration
 urlpatterns = [
-    path('profile/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
+    path('profile/', UserProfileView.as_view(), name='user_profile'),
     path('signup/', UserRegistrationViewCreate.as_view(), name='signup_user'),
     path('login/', UserLoginViewCreate.as_view(), name='login_user'),
     path('logout/', LogOutUserView.as_view(), name='logout_user'),

@@ -17,7 +17,7 @@ class UserProfileViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('username', 'email', 'avatar', 'bio')
+        fields = ('username', 'email')
         read_only = ['id']
 
 '''''
@@ -25,25 +25,28 @@ user registration serializer create
 '''''
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    confirm_password = serializers.CharField(write_only=True, required=True)
+    confirmpassword = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'password', 'confirm_password')
+        fields = ('email', 'password', 'confirmpassword')
 
-    # validates user data and returns data 
+    # validates user data and returns data
     def validate(self, data):
+        # validate all fields must be required if any empty field
+        if not all([data['password'], data['confirmpassword'], data['email']]):
+            raise serializers.ValidationError({'fields': 'All fields are required'})
+        
         # validates if user email exist
         if CustomUser.objects.filter(email=data['email']).exists():
             raise serializers.ValidationError({'email': 'User with email already exist'})
 
+        if not data['password']:
+            raise serializers.ValidationError({'password': 'Password field is required'})
+
         # validates if user password is validated
-        if data['password'] and data['confirm_password'] and data['password'] != data['confirm_password']:
+        if data['password'] != data['confirmpassword']:
             raise serializers.ValidationError({'password': 'Passwords do not match'})
-        
-        # validate all fields must be required if any empty field
-        if not data['password'] or not data['confirm_password'] or not data['email']:
-            raise serializers.ValidationError({'fields': 'All fields are required'})
 
         # returns the data for user
         return data
@@ -51,7 +54,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     # function for creating user
     def create(self, validated_data):
         # removes the confirm password from the data we are storing
-        validated_data.pop('confirm_password', None)
+        validated_data.pop('confirmpassword', None)
 
         # Generate username from email
         email = validated_data.get('email')

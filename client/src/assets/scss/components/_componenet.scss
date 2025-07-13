@@ -1,0 +1,26 @@
+.__msg {
+  padding: 10px 25px;
+  width: fit-content;
+  position: absolute;
+  z-index: 22;
+  right: 12px;
+  top: 12px;
+  border-radius: 5px;
+  animation: 1s ease-in-out;
+  transition: 1s;
+
+  span {
+    color: #fff;
+    font-size: 16px;
+  }
+}
+
+.container-error-msg {
+  background-color: #ff3737;
+  border-bottom: 5px solid #8b0a0a;
+}
+
+.container-success-msg {
+  background-color: #32cd32;
+  border-bottom: 5px solid #008000;
+}

@@ -7,6 +7,8 @@ import Login from "./pages/auth/Login";
 import Reddit from "./pages/reddit/Reddit.jsx";
 import BlogpostDetails from "./pages/reddit/BlogpostDetails.jsx";
 import Register from "./pages/auth/Register.jsx";
+import ProtectedRoute from "./components/layouts/authlayout/ProtectedRoute.jsx";
+import LogoutUser from "./components/layouts/authlayout/LogoutUser.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -18,6 +20,14 @@ createRoot(document.getElementById("root")).render(
         {/* authentication route */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+        <Route
+          path="/logout"
+          element={
+            <ProtectedRoute>
+              <LogoutUser />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </StrictMode>

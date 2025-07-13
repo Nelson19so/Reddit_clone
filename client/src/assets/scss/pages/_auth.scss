@@ -272,9 +272,8 @@ body {
     font-size: 13px;
     text-align: center;
     color: #ffffff;
-    padding-top: 8px;
+    padding: 8px;
     width: 100%;
-    height: 35px;
     border: none;
     border-radius: 20px;
     margin-top: 23px;
@@ -321,10 +320,10 @@ body {
     background-color: rgba(255, 255, 255, 1);
   }
 
-  a.btn-signup:hover,
-  a.btn-signin:hover {
+  button.btn-signup:hover,
+  button.btn-signin:hover {
     cursor: pointer;
-    background-color: #b17f6d;
+    background-color: #e7ab95;
     transition: background-color 0.5s;
   }
 

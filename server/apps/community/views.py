@@ -114,7 +114,7 @@ class CommunityListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        communities = Community.objects.all()
+        communities = Community.objects.all().prefetch_related('blog_vote')
         serializer = CommunitySerializer(communities, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+import { LoginUser } from "../../../utils/accounts/Auth_api";
+import { logout } from "../../../utils/accounts/Auth_api";
 
 const ProtectedRoute = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(null); // null = loading
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("access");
 
       if (!token) {
+        logout();
         setAuthenticated(false);
         return;
       }
 
       try {
-        const response = await axios.get(
-          "http://localhost:8000/api/token_verify/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        // Verify token using token_verify endpoint
+        await axios.post("http://localhost:8000/api/accounts/token_verify/", {
+          token: token,
+        });
 
-        if (response.status === 200) {
-          setAuthenticated(true);
-        } else {
-          setAuthenticated(false);
-        }
+        setAuthenticated(true);
       } catch (error) {
-        console.error("Auth check failed:", error);
+        console.error(
+          "Auth check failed:",
+          error.response?.data || error.message
+        );
+        logout();
         setAuthenticated(false);
       }
     };

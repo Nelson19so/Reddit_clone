@@ -12,6 +12,12 @@ import Post from "../../components/layouts/mianlayout/Post";
 function Reddit() {
   document.title = "Reddit blog list";
 
+  // localStorage.removeItem("access");
+  // localStorage.removeItem("refresh");
+  // const token = localStorage.getItem("refresh");
+
+  // console.log(token);
+
   const posts = [
     {
       id: 1,

@@ -14,14 +14,11 @@ from rest_framework_simplejwt.views import TokenRefreshView
 User = get_user_model()
 
 # user profile view
-class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+class UserProfileView(generics.RetrieveAPIView):
     serializer_class = UserProfileViewSerializer
-    lookup_field = 'pk'
 
     def get_object(self):
-        # always return the profile of the currently authenticated user
-        return self.request.user.profile
+        return self.request.user
 
 '''''
 user account registration view create
@@ -108,7 +105,7 @@ class UserLoginViewCreate(APIView):
         # returns a json response if the use fails
         return Response({
             'success': False,
-            'errors': serializer.errors
+            'message': serializer.errors
         }, status=status.HTTP_404_NOT_FOUND)
 
 # user log out view for user 
@@ -157,8 +154,6 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
 
 # token verify api view
 class UserTokenVerifyView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         token = request.data.get('token')
         try:

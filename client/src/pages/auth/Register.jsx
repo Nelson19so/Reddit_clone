@@ -1,65 +1,148 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { CreateAccount, isAuthenticated } from "../../utils/accounts/Auth_api";
+
+import Message from "../../components/layouts/mianlayout/Message";
 
 function Register() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmpassword: "",
+  });
+  const [error, setError] = useState({});
+  const [success, setSuccess] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/");
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError({});
+
+    const response = await CreateAccount(formData);
+
+    if (!response.ok) {
+      setError(response.data.error);
+      console.log(response.data.error);
+      setTimeout(() => {
+        setError({});
+      }, 5000);
+    } else {
+      // setSuccess("User created successfully");
+      console.log("Backend Response", response.message);
+      setSuccess(response.message);
+      setTimeout(() => {
+        setSuccess(null);
+      }, 5000);
+
+      setFormData({
+        email: "",
+        password: "",
+        confirmpassword: "",
+      });
+      navigate("/");
+    }
+  };
+
+  const renderErrors = () => {
+    return (
+      error &&
+      Object.entries(error).map(([field, messages], i) => {
+        const messageText = Array.isArray(messages)
+          ? messages.join(", ")
+          : String(messages);
+
+        return (
+          <Message
+            key={i}
+            showError={true}
+            error={`${field}: ${messageText}`}
+          />
+        );
+      })
+    );
+  };
+
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700"
-        rel="stylesheet"
-        type="text/css"
-      />
-
-      <div class="container_auth">
-        <div class="frame">
-          <div class="nav">
+      {success && <Message showSuccess={true} success={success} />}
+      {renderErrors()}
+      <div className="container_auth">
+        <div className="frame">
+          <div className="nav">
             <ul className="links">
               <li>
-                <Link to="/login" class="btn">
+                <Link to="/login" className="btn">
                   Sign in
                 </Link>
               </li>
-              <li class="signup-active">
-                <Link to="/signup" class="btn">
+              <li className="signup-active">
+                <Link to="/signup" className="btn">
                   Sign up
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <form class="form-signup" action="" method="post" name="form">
+            <form
+              className="form-signup"
+              onSubmit={handleSubmit}
+              method="post"
+              name="form"
+            >
               {/* <label for="fullname">Full name</label> */}
               {/* <input
-                class="form-styling"
+                className="form-styling"
                 type="text"
                 name="fullname"
                 placeholder=""
               /> */}
               <label for="email">Email</label>
               <input
-                class="form-styling"
+                className="form-styling"
                 type="text"
                 name="email"
                 placeholder=""
+                value={formData.email}
+                onChange={handleChange}
               />
               <label for="password">Password</label>
               <input
-                class="form-styling"
+                className="form-styling"
                 type="text"
                 name="password"
                 placeholder=""
+                value={formData.password}
+                onChange={handleChange}
               />
               <label for="confirmpassword">Confirm password</label>
               <input
-                class="form-styling"
+                className="form-styling"
                 type="text"
                 name="confirmpassword"
                 placeholder=""
+                value={formData.confirmpassword}
+                onChange={handleChange}
               />
-              <a class="btn-signup">Sign Up</a>
+
+              <button className="btn-signup">Sign Up</button>
             </form>
           </div>
 
-          <div class="forgot">
+          <div className="forgot">
             <a href="#">Forgot your password?</a>
           </div>
         </div>
