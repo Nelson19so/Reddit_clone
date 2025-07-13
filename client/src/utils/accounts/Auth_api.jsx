@@ -5,7 +5,7 @@ const API_URL = "http://127.0.0.1:8000/api/accounts/";
 // register user account api
 export const CreateAccount = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}signup/`, formData);
+    const response = await axios.post(`${API_URL}register/`, formData);
 
     const { token } = response.data;
 
@@ -100,7 +100,7 @@ export const getUser = async () => {
         return retryRes.data;
       } catch (refreshError) {
         console.error("Refresh failed", refreshError);
-        localStorage.clear();
+        logout();
         window.location.href = "/login";
       }
     }

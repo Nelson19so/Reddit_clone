@@ -100,7 +100,7 @@ class UserLoginViewCreate(APIView):
                     'access': str(refresh.access_token),
                     'refresh': str(refresh)
                 },
-            }, status=status.HTTP_202_ACCEPTED)
+            }, status=status.HTTP_200_OK)
 
         # returns a json response if the use fails
         return Response({
@@ -182,4 +182,3 @@ class CustomTokenRefreshView(TokenRefreshView):
                 'success': False,
                 'message': 'Invalid or expired refresh token'
             }, status=status.HTTP_401_UNAUTHORIZED)
-

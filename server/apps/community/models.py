@@ -49,7 +49,7 @@ class BlogPostCategory(models.Model):
 
 # blog post model
 class BlogPost(models.Model):
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')
+    community = models.ManyToManyField(Community, related_name='community_posts')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts'
     )
@@ -71,18 +71,23 @@ class BlogPost(models.Model):
                 self.slug = f'{base_slug}{num}'
                 num += 1
             self.slug = base_slug
+            
         return super().save(*args, **kwargs)
 
 # Blog post vote model
 class BlogPostVote(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_vote')
-    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='blog_vote')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_vote'
+    )
+    post = models.OneToOneField(BlogPost, on_delete=models.CASCADE, related_name='blog_vote')
     category = models.ForeignKey(
         BlogPostCategory, on_delete=models.PROTECT, 
         related_name='blog_category', null=True, blank=True
     )
     upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
     downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
+    upvote_count = models.IntegerField(max_length=1)
+    downvote_count = models.IntegerField(max_length=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -114,7 +114,7 @@ class CommunityListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        communities = Community.objects.all().prefetch_related('blog_vote')
+        communities = Community.objects.all().prefetch_related('community_posts')
         serializer = CommunitySerializer(communities, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -255,9 +255,12 @@ class DisplayMembersCommunity(APIView):
     def get(self, request):
         user = request.user
         community = Community.objects.filter(members=user)
+
         if community.exists():
-            serializer = CommunitySerializer(community, many=True)
+            serializer = CommunitySerializer(community, many=True, context={'request': request})
+
             return Response(serializer.data, status=status.HTTP_200_OK)
+            
         return Response({
             'message': 'No subreddit found yet',
         }, status=status.HTTP_404_NOT_FOUND)

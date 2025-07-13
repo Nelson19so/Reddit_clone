@@ -21,7 +21,7 @@ class CommentSerializer(serializers.Serializer):
     def create(self, validated_data):
         comment = Comment.objects.create(**validated_data)
         return comment
-    
+
 # blog post serializer create
 class CommunitySerializer(serializers.ModelSerializer):
 
@@ -32,7 +32,7 @@ class CommunitySerializer(serializers.ModelSerializer):
 
     def get_is_members(self, obj):
         request = self.context.get('request')
-        return request.user in obj.members.all() if request.is_authenticated else False
+        return request.user in obj.members.all() if request.user.is_authenticated else False
 
     def create(self, validated_data):
         request = self.context.get('request')

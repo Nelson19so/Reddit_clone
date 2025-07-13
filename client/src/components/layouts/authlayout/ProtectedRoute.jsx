@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import { LoginUser } from "../../../utils/accounts/Auth_api";
 import { logout } from "../../../utils/accounts/Auth_api";
 
 const ProtectedRoute = ({ children }) => {
@@ -19,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
 
       try {
         // Verify token using token_verify endpoint
-        await axios.post("http://localhost:8000/api/accounts/token_verify/", {
+        await axios.post("http://localhost:8000/api/accounts/token/verify/", {
           token: token,
         });
 
@@ -37,7 +36,19 @@ const ProtectedRoute = ({ children }) => {
     checkAuth();
   }, []);
 
-  if (authenticated === null) return <div>Loading...</div>;
+  if (authenticated === null)
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          display: "flex",
+          justifyItems: "center",
+          alignItems: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
 
   return authenticated ? children : <Navigate to="/login" replace />;
 };

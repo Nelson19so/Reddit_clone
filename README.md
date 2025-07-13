@@ -53,24 +53,24 @@ This is the backend API for a Reddit-like platform built with **Django REST Fram
 ```bash
 git clone https://github.com/your-username/reddit-clone-backend.git
 cd reddit-clone-backend
+```
 
 2. Set up environment:
 
-
-
+```bash
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
+```
 
 3. Install requirements:
 
-
-
+```bash
 pip install -r requirements.txt
+```
 
 4. Configure .env file:
 
-
-
+```bash
 SECRET_KEY=your_django_secret
 DEBUG=True
 
@@ -80,26 +80,26 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
 ALLOWED_HOSTS=127.0.0.1,localhost
+```
 
 5. Apply migrations:
 
-
-
+```bash
 python manage.py makemigrations
 python manage.py migrate
+```
 
 6. Create superuser:
 
-
-
+```bash
 python manage.py createsuperuser
+```
 
 7. Start server:
 
-
-
+```bash
 python manage.py runserver
-
+```
 
 ---
 
@@ -107,26 +107,25 @@ python manage.py runserver
 
 1. Navigate to frontend project:
 
-
-
+```bash
 cd reddit-clone-frontend
+```
 
 2. Install dependencies:
 
-
-
+```bash
 npm install
+```
 
 3. Start React app:
 
-
-
+```bash
 npm start
+```
 
 4. Axios config example:
 
-
-
+```bash
 import axios from "axios";
 
 export const axiosInstance = axios.create({
@@ -135,7 +134,7 @@ export const axiosInstance = axios.create({
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
-
+```
 
 ---
 
@@ -143,34 +142,31 @@ export const axiosInstance = axios.create({
 
 1. Go to Google Cloud Console
 
-
 2. Create a new project → OAuth consent screen
-
 
 3. Add credentials: OAuth Client ID
 
-
 4. Add redirect URIs:
 
-
-
+```bash
 http://localhost:8000/accounts/google/login/callback/
 http://localhost:3000  # if using React dev server
+```
 
 5. Update .env:
 
-
-
+```bash
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
-
+```
 
 ---
 
 🔌 API Endpoints
 
-Endpoint	Method	Description
+Endpoint Method Description
 
+```bash
 /api/register/	POST	Register a new user
 /api/login/	POST	Login user
 /api/logout/	POST	Logout user
@@ -182,8 +178,7 @@ Endpoint	Method	Description
 /api/comments/:slug/	POST	Add comment to post
 /api/communities/	GET/POST	Community list/create
 /api/token/verify/	POST	Verify JWT token
-
-
+```
 
 ---
 
@@ -195,5 +190,6 @@ Role: Backend Developer
 
 GitHub: github.com/Nelson19so
 
+```bash
 LinkedIn: https://www.linkedin.com/in/nelson-junior-700b67363?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
 ```
