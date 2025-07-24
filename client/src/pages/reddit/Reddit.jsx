@@ -26,6 +26,7 @@ function Reddit() {
         "13 years ago today, a true patriot lost his life. Rest in Peace big guy.",
       author: "the_big_mothergoose",
       subreddit: "MURICA",
+      slug: "hello",
     },
     {
       id: 2,
@@ -33,6 +34,7 @@ function Reddit() {
       img: maskGroup2,
       author: "bwa_ahki",
       subreddit: "Music",
+      slug: "hello",
     },
     {
       id: 3,
@@ -47,6 +49,7 @@ function Reddit() {
         "Angela Merkel reportedly had to explain the 'fundamentals' of EU trade to Trump 11 times",
       author: "satosaison",
       subreddit: "worldnews",
+      slug: "hello",
     },
     {
       id: 5,
@@ -54,6 +57,7 @@ function Reddit() {
       img: maskGroup3,
       author: "IHaeTypos",
       subreddit: "whitepeoplegifs",
+      slug: "hello",
     },
     {
       id: 6,
@@ -62,6 +66,7 @@ function Reddit() {
         "PocketDerm lets you see a dermatologist online for prescription acen treatment. Redditors get their FIRST MONTH FREE!",
       author: "promoted by ashwin_3beauty",
       subreddit: "Ads",
+      slug: "hello",
     },
   ];
 
@@ -87,7 +92,7 @@ function Reddit() {
             {posts.map((post) => (
               <Post
                 key={post.id}
-                slug={post.title}
+                slug={post.slug}
                 img={post.img}
                 title={post.title}
                 author={post.author}

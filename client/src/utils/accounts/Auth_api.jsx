@@ -106,3 +106,23 @@ export const getUser = async () => {
     }
   }
 };
+
+// export const refreshUser = async () => {
+//   const refresh = localStorage.getItem("refresh");
+
+//   try {
+//     const response = await axios.get(`${API_URL}profile/`, {
+//       headers: {
+//         Authorization: `Bearer ${refresh}`,
+//       },
+//     });
+
+//     return response.data;
+//   } catch (refreshError) {
+//     console.error("Refresh failed", refreshError);
+//     logout();
+//     window.location.href = "/login";
+//   }
+// };
+
+// refreshUser();

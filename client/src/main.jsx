@@ -15,11 +15,16 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Reddit />} />
-        <Route path="blogpost_details/:slug" element={<BlogpostDetails />} />
+
+        <Route path="/blogpost_details/:slug/" element={<BlogpostDetails />} />
+
+        <Route path="/community/:slug/" element={<Reddit />} />
 
         {/* authentication route */}
         <Route path="/login" element={<Login />} />
+
         <Route path="/signup" element={<Register />} />
+
         <Route
           path="/logout"
           element={

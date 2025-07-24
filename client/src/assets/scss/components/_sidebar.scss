@@ -1,3 +1,15 @@
+.active-sidebar {
+  @media only screen and (max-width: 1061px) {
+    left: 0 !important;
+  }
+}
+
+.disabled-sidebar {
+  @media only screen and (max-width: 1061px) {
+    left: -256px !important;
+  }
+}
+
 .container_sidebar {
   width: 256px;
   border-right: 1px solid #e5e5e5;
@@ -6,10 +18,12 @@
   top: 0;
   position: fixed;
   background-color: #ffff;
+  z-index: 66666;
+  transition: 1s;
+  animation: 1s ease-in-out;
 
   @media only screen and (max-width: 1061px) {
-    left: -256px !important;
-    display: none;
+    left: -256px;
   }
 
   aside {

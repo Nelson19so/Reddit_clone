@@ -10,11 +10,24 @@ const communityMembers = async () => {
 
   if (token) {
     try {
-      await api.get(`community-user/`);
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/community/community-user/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
-      throw error;
+      console.log(
+        "Fetched Reddit data: ",
+        error.response?.data || error.message
+      );
+      return [];
     }
+  } else {
+    return false;
   }
 };
 

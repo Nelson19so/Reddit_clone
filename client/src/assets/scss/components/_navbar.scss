@@ -18,7 +18,7 @@
     align-items: center;
 
     @media only screen and (max-width: 1061px) {
-      display: none;
+      border: 1px solid #e5e5e5;
     }
 
     p {
@@ -36,6 +36,10 @@
       font-size: 14px;
       color: white;
 
+      @media only screen and (max-width: 1061px) {
+        display: none !important;
+      }
+
       button {
         display: block;
         padding: 5px;
@@ -52,32 +56,25 @@
 
     @media only screen and (max-width: 1061px) {
       position: relative;
-    }
 
-    .container-filter-mobile {
-      padding: 15px 23px;
-
-      p {
-        font-weight: 500;
-
-        span {
-          color: #ff4500;
-        }
-      }
-
-      @media only screen and (min-width: 1061px) {
-        display: none;
+      .toggle-filter {
+        height: 254px !important;
+        padding: 15px 0;
       }
     }
 
     ul {
       @media only screen and (max-width: 1061px) {
         box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-        padding: 15px 0;
         background-color: #ffffff;
         display: block;
         gap: 3px;
         position: absolute;
+        animation: 1s ease-in-out;
+        transition: 1s;
+        height: 0px;
+        padding: 0;
+        overflow: hidden;
       }
 
       @media only screen and (min-width: 1061px) {
@@ -132,11 +129,25 @@
     }
   }
 
-  .container-mobile-display {
-    border: 1px solid #e5e5e5;
+  .container-mobile-hidden {
+    @media only screen and (max-width: 1061px) {
+      display: none;
+    }
+  }
+
+  .container-filter-mobile {
+    padding: 15px 23px;
 
     @media only screen and (min-width: 1061px) {
       display: none;
+    }
+
+    p {
+      font-weight: 500;
+
+      span {
+        color: #ff4500;
+      }
     }
   }
 }

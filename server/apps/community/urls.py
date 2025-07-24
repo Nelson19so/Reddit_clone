@@ -5,13 +5,13 @@ from .views import (
     CommunityViewCreate,  BlogPostVoteApiView,
     BloPostCreateApiView, BlogPostUpdateDeleteApiView,
     BlogPostListApiView,  CommunityBlogPostListApiView,
-    DisplayMembersCommunity
+    DisplayMembersCommunityApiView,
 )
 
 urlpatterns = [
     path('comment/post/', PostCommentView.as_view(), name='post_comment'),
-    path('<slug:slug>/', CommunityDetailView.as_view(), name='community_detail'),
-    path('', CommunityListView.as_view(), name='community_list'),
+    path('community/<slug:slug>/', CommunityDetailView.as_view(), name='community_detail'),
+    path('community/', CommunityListView.as_view(), name='community_list'),
     path('update_delete/', CommunityUpdateDelete.as_view(), name='community_updated_delete'),
     path('create/', CommunityViewCreate.as_view(), name='community_create'),
     path('blogpost/vote/<slug:slug>/', BlogPostVoteApiView.as_view(), name='blogpost_vote'),
@@ -25,5 +25,5 @@ urlpatterns = [
         'community/blogpost/<slug:community_slug>', 
         CommunityBlogPostListApiView.as_view(), name='community_blogpost'
     ),
-    path('community-user/', DisplayMembersCommunity.as_view(), name='members-community'),
+    path('community-user/', DisplayMembersCommunityApiView.as_view(), name='members-community'),
 ]

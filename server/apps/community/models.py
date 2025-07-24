@@ -19,9 +19,10 @@ class Community(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self,*args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+
         return super().save(*args, **kwargs)
 
 # blog post category model
@@ -86,8 +87,8 @@ class BlogPostVote(models.Model):
     )
     upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
     downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
-    upvote_count = models.IntegerField(max_length=1)
-    downvote_count = models.IntegerField(max_length=1)
+    upvote_count = models.IntegerField()
+    downvote_count = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -27,8 +27,8 @@ class CommunitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Community
-        fields = ['id', 'slug', 'name', 'description', 'created_at', 'owner']
-        read_only = ['id', 'slug', 'created_at']
+        fields = ['id', 'slug', 'name', 'description', 'created', 'owner']
+        read_only = ['id', 'slug', 'created']
 
     def get_is_members(self, obj):
         request = self.context.get('request')
@@ -49,6 +49,7 @@ class VoteSerializerCreate(serializers.ModelSerializer):
     def validate(self, data):
         if data.get("upvote") and data.get("downvote"):
             raise serializers.ValidationError("You can't upvote and downvote at the same time.")
+
         return data
 
     def create(self, validated_data):
@@ -69,7 +70,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BlogPost
-        fields = ['author', 'community', 'title', 'content', 'image']
+        fields = ['id', 'author', 'community', 'title', 'content', 'image']
 
     # getting the blogpost author returning none if not author
     def get_is_author(self, obj):
@@ -112,5 +113,5 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
     # handles the user posting the bog on create
     def create(self, validated_data):
-        return BlogPost.objects.get_or_create(**validated_data)
+        return BlogPost.objects.create(**validated_data)
 

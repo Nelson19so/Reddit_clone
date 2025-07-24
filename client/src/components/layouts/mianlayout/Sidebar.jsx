@@ -1,17 +1,34 @@
-import { Link, useLocation } from "react-router-dom";
+import { data, Link, useLocation } from "react-router-dom";
 
 import logo from "../../../assets/images/reddit-1.png";
 import { useEffect, useState } from "react";
+import { communityMembers } from "../../../utils/Api";
 
-export default function Sidebar() {
+export default function Sidebar({ displaySidebar }) {
   const location = useLocation();
   const [home, setIsHomePage] = useState(false);
+  const [reddit, setReddit] = useState([]);
 
   useEffect(() => {
     setIsHomePage(location.pathname === "/");
   }, [location]);
+
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      setReddit(null);
+      const data = await communityMembers();
+      setReddit(data);
+    };
+
+    fetchCommunity();
+  }, []);
+
   return (
-    <div className="container_sidebar w-[256px]">
+    <div
+      className={`container_sidebar w-[256px] ${
+        displaySidebar ? "active-sidebar" : "disabled-sidebar"
+      }`}
+    >
       <aside className="h-[100%] flex justify-baseline flex-col">
         <div className="container-logo p-4">
           <Link to="/">
@@ -159,17 +176,30 @@ export default function Sidebar() {
                     </div>
                   </div>
 
-                  <ul className="mt-3 flex justify-items-start gap-3 flex-col">
-                    <li>
-                      <Link className="pl-9">gaming</Link>
-                    </li>
-                    <li>
-                      <Link className="pl-9">Funny</Link>
-                    </li>
-                    <li>
-                      <Link className="pl-9">Series</Link>
-                    </li>
-                  </ul>
+                  {reddit === null ? (
+                    <ul>
+                      <li>
+                        <Link className="pl-9">loading...</Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul className="mt-3 flex justify-items-start gap-3 flex-col">
+                      {Array.isArray(reddit) && (
+                        <>
+                          {reddit.map((redd) => (
+                            <li key={redd.id}>
+                              <Link
+                                to={`/community/${redd.slug}/`}
+                                className="pl-9"
+                              >
+                                {redd.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </>
+                      )}
+                    </ul>
+                  )}
                 </li>
               </ul>
             </div>
