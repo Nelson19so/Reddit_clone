@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { logout } from "../../../utils/accounts/Auth_api";
+import { logout } from "../../../utils/accounts/Authservice";
 
 export default function LogoutUser() {
   useEffect(() => {

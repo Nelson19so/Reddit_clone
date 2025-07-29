@@ -31,6 +31,7 @@ export default function Navbar({ handleSidebar }) {
     }
 
     checksForUrlDisplayFilter();
+    setToggle(false);
   }, [slug, location]);
 
   function handleFilterToggle() {

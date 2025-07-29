@@ -116,7 +116,7 @@ class LogOutUserView(APIView):
     # handles the logic for black listing/logging out user
     def post(self, request):
         try:
-            refresh_token = request.data['refresh']
+            refresh_token = request.data.get['refresh']
             token = RefreshToken(refresh_token)
             # prevent re use
             token.blacklist()
@@ -170,14 +170,18 @@ class UserTokenVerifyView(APIView):
 
 # custom JWT refreshed access token for user
 class CustomTokenRefreshView(TokenRefreshView):
+
     def post(self, request, *args, **kwargs):
-        try:
-            response = super().post(request, *args, **kwargs)
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
             return Response({
                 'success': True,
-                'access_token': response.data['access']
+                'refresh': response.data.get('refresh'),
+                'access': response.data.get('access'),
             }, status=status.HTTP_200_OK)
-        except InvalidToken:
+
+        else:
             return Response({
                 'success': False,
                 'message': 'Invalid or expired refresh token'

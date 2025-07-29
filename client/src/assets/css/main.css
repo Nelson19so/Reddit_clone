@@ -339,6 +339,11 @@ html {
   font-size: 15px;
   width: auto;
 }
+@media only screen and (max-width: 450px) {
+  .reddit_post .title {
+    font-size: 12px;
+  }
+}
 .reddit_post .__post-about {
   color: #414141;
   font-size: 12px;

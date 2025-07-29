@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { isAuthenticated, LoginUser } from "../../utils/accounts/Auth_api";
+import { LoginUser, isAuthenticated } from "../../utils/accounts/Authservice";
 import Message from "../../components/layouts/mianlayout/Message";
 
 function Login() {

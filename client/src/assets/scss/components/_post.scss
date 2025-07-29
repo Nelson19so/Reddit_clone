@@ -2,6 +2,10 @@
   .title {
     font-size: 15px;
     width: auto;
+
+    @media only screen and (max-width: 450px) {
+      font-size: 12px;
+    }
   }
   .__post-about {
     color: #414141;

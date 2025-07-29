@@ -4,7 +4,7 @@ from .views import (
     UserLoginViewCreate, LogOutUserView, 
     UserDeleteViewCreate, UserTokenVerifyView,
     CustomTokenRefreshView,
-)
+) 
 
 # api url configuration
 urlpatterns = [

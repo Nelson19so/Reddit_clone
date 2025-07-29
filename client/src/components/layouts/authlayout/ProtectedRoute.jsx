@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import { logout } from "../../../utils/accounts/Auth_api";
+import { logout } from "../../../utils/accounts/Authservice";
 
 const ProtectedRoute = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(null); // null = loading

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CreateAccount, isAuthenticated } from "../../utils/accounts/Auth_api";
+import {
+  isAuthenticated,
+  CreateAccount,
+} from "../../utils/accounts/Authservice";
 
 import Message from "../../components/layouts/mianlayout/Message";
 

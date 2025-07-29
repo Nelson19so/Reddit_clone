@@ -55,6 +55,20 @@ export const LoginUser = async (formData) => {
   }
 };
 
+export const refreshToken = async () => {
+  try {
+    const refresh = localStorage.getItem("refresh");
+    const response = await axios.post(`${API_URL}token/refresh/`, { refresh });
+
+    return response.data;
+  } catch (refreshError) {
+    console.error("Refresh failed", refreshError);
+    logout();
+    window.location.href = "/login";
+    return null;
+  }
+};
+
 // logout user api
 export const logout = () => {
   localStorage.removeItem("access");
@@ -62,67 +76,7 @@ export const logout = () => {
   window.location.href = "/login";
 };
 
-// is auth api
 export const isAuthenticated = () => {
   const token = localStorage.getItem("access");
   return !!token;
 };
-
-// getting user and it data
-export const getUser = async () => {
-  let access = localStorage.getItem("access");
-
-  try {
-    const response = await axios.get(`${API_URL}profile/`, {
-      headers: {
-        Authorization: `Bearer ${access}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    if (error.response?.status === 401) {
-      const refresh = localStorage.getItem("refresh");
-
-      try {
-        const res = await axios.post(`${API_URL}token/refresh/`, { refresh });
-
-        const newAccessToken = res.data.access_token;
-        localStorage.setItem("access", newAccessToken);
-
-        // Retry request with new token
-        const retryRes = await axios.get(`${API_URL}profile/`, {
-          headers: {
-            Authorization: `Bearer ${newAccessToken}`,
-          },
-        });
-
-        return retryRes.data;
-      } catch (refreshError) {
-        console.error("Refresh failed", refreshError);
-        logout();
-        window.location.href = "/login";
-      }
-    }
-  }
-};
-
-// export const refreshUser = async () => {
-//   const refresh = localStorage.getItem("refresh");
-
-//   try {
-//     const response = await axios.get(`${API_URL}profile/`, {
-//       headers: {
-//         Authorization: `Bearer ${refresh}`,
-//       },
-//     });
-
-//     return response.data;
-//   } catch (refreshError) {
-//     console.error("Refresh failed", refreshError);
-//     logout();
-//     window.location.href = "/login";
-//   }
-// };
-
-// refreshUser();
