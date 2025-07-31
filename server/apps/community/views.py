@@ -1,17 +1,17 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status
+from rest_framework   import generics, status
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 )
-from .serializers import (
+from .serializers     import (
     CommentSerializer, CommunitySerializer, 
     VoteSerializerCreate, BlogPostSerializer
 )
 from .models import BlogPost, Comment, Community
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import Http404
-from django.contrib.auth import get_user_model
+from django.http          import Http404
+from django.contrib.auth  import get_user_model
 
 
 # getting user model

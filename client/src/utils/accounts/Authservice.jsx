@@ -1,11 +1,12 @@
 import axios from "axios";
+import api from "../Api";
 
-const API_URL = "http://127.0.0.1:8000/api/accounts/";
+// const API_URL = "http://127.0.0.1:8000/api/accounts/";
 
 // register user account api
 export const CreateAccount = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}register/`, formData);
+    const response = await api.post('accounts/register/', formData);
 
     const { token } = response.data;
 
@@ -33,7 +34,7 @@ export const CreateAccount = async (formData) => {
 // login user api
 export const LoginUser = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}login/`, formData);
+    const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', formData);
 
     const { token } = response.data;
 
@@ -58,7 +59,7 @@ export const LoginUser = async (formData) => {
 export const refreshToken = async () => {
   try {
     const refresh = localStorage.getItem("refresh");
-    const response = await axios.post(`${API_URL}token/refresh/`, { refresh });
+    const response = await api.post('token/refresh/', { refresh });
 
     return response.data;
   } catch (refreshError) {

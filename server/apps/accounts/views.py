@@ -1,17 +1,21 @@
 # from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.views    import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializer import UserProfileViewSerializer, UserRegistrationSerializer, UserLoginSerializerCreate
-from django.contrib.auth import get_user_model, login, logout
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from .models import CustomUser
-from rest_framework_simplejwt.views import TokenRefreshView
+from .serializer import (
+    UserProfileViewSerializer, UserRegistrationSerializer, 
+    UserLoginSerializerCreate
+)
+from django.contrib.auth     import get_user_model
+from rest_framework_simplejwt.tokens     import RefreshToken, AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.views      import TokenRefreshView
+
 
 # defining the user
 User = get_user_model()
+
 
 # user profile view
 class UserProfileView(generics.RetrieveAPIView):
