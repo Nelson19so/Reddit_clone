@@ -3,25 +3,40 @@ import { data, Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/images/reddit-1.png";
 import { useEffect, useState } from "react";
 import { communityMembers } from "../../../utils/Api";
+import { userProfile } from "../../../utils/accounts/Authservice";
+import UseAccessToken from "../authlayout/UseAccessToken";
 
 export default function Sidebar({ displaySidebar }) {
-  const location = useLocation();
   const [home, setIsHomePage] = useState(false);
   const [reddit, setReddit] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loadingCommunity, setLoadingCommunity] = useState(false);
 
+  // handles location changes ...
+  const location = useLocation();
+
+  const [access] = UseAccessToken();
+
+  // Handles home page location
   useEffect(() => {
     setIsHomePage(location.pathname === "/");
   }, [location]);
 
+  // Handles the apis for fetching user data and community data
   useEffect(() => {
-    const fetchCommunity = async () => {
-      setReddit(null);
-      const data = await communityMembers();
-      setReddit(data);
-    };
+    if (!access) return;
 
-    fetchCommunity();
-  }, []);
+    setLoadingCommunity(true);
+
+    Promise.all([communityMembers(), userProfile()])
+      .then(([communityData, userData]) => {
+        setReddit(communityData || []);
+        setUser(userData);
+      })
+      .finally(() => {
+        setLoadingCommunity(false);
+      });
+  }, [access, location.pathname]);
 
   return (
     <div
@@ -38,24 +53,38 @@ export default function Sidebar({ displaySidebar }) {
 
         <div className="container-article p-4">
           <div className="flex justify-between gap-5">
-            <p className="text-[14px]">kikoherrsc@gmail.com</p>
-            <button className="cursor-pointer">
-              <svg
-                width="24"
-                height="25"
-                viewBox="0 0 24 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M7 10.2334H17L12 15.2334L7 10.2334Z"
-                  fill="black"
-                  fill-opacity="0.87"
-                />
-              </svg>
-            </button>
+            {user ? (
+              <>
+                {user?.email ? (
+                  <>
+                    <p className="text-[14px]">{user.email}</p>
+                    <button className="cursor-pointer">
+                      <svg
+                        width="24"
+                        height="25"
+                        viewBox="0 0 24 25"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M7 10.2334H17L12 15.2334L7 10.2334Z"
+                          fill="black"
+                          fill-opacity="0.87"
+                        />
+                      </svg>
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-xs">Loading...</p>
+                )}
+              </>
+            ) : (
+              <Link className="cursor-pointer text-sm" to="/signup">
+                Register
+              </Link>
+            )}
           </div>
         </div>
 
@@ -176,15 +205,11 @@ export default function Sidebar({ displaySidebar }) {
                     </div>
                   </div>
 
-                  {reddit === null ? (
-                    <ul>
-                      <li>
-                        <Link className="pl-9">loading...</Link>
-                      </li>
-                    </ul>
-                  ) : (
-                    <ul className="mt-3 flex justify-items-start gap-3 flex-col">
-                      {Array.isArray(reddit) && (
+                  <ul className="mt-3 flex justify-items-start gap-3 flex-col">
+                    {loadingCommunity ? (
+                      <p className="text-sm">loading...</p>
+                    ) : (
+                      reddit.length > 0 && (
                         <>
                           {reddit.map((redd) => (
                             <li key={redd.id}>
@@ -197,9 +222,9 @@ export default function Sidebar({ displaySidebar }) {
                             </li>
                           ))}
                         </>
-                      )}
-                    </ul>
-                  )}
+                      )
+                    )}
+                  </ul>
                 </li>
               </ul>
             </div>

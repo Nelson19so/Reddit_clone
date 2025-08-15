@@ -8,15 +8,22 @@ const api = axios.create({
   },
 });
 
+/**
+ refreshes token for user when refresh token is no longer authorized to access -
+  the user data
+**/
+
+// checks for access token and then uses the access token for request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access");
-
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    const access = localStorage.getItem("access");
+    if (access) config.headers.Authorization = `Bearer ${access}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
+
+// get the user new token and stores it... then refreshes again
 
 api.interceptors.response.use(
   (response) => response,
@@ -26,10 +33,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccessToken = await refreshToken();
-      localStorage.setItem("access", newAccessToken.access);
 
       if (newAccessToken) {
+        localStorage.setItem("access", newAccessToken.access);
+        localStorage.setItem("refresh", newAccessToken.refresh);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken.access}`;
+
         return api(originalRequest);
       }
     }
@@ -39,24 +48,89 @@ api.interceptors.response.use(
 
 export default api;
 
-// getting community, users community and members of the community
-const communityMembers = async () => {
-  const token = localStorage.getItem("access");
+// getting community details
+const communityDetails = async (slug) => {
+  const access = localStorage.getItem("access");
 
-  if (token) {
-    try {
-      const response = await api.get("community/community-user/");
-      return response.data;
-    } catch (error) {
-      console.log(
-        "Fetched Reddit data: ",
-        error.response?.data || error.message
-      );
-      return [];
-    }
-  } else {
-    return false;
+  if (!access) return null;
+
+  try {
+    const response = await api.get(`community/community-details/${slug}/`);
+    return response.data;
+  } catch (error) {
+    return null;
   }
 };
 
-export { communityMembers };
+// getting community, users community and members of the community
+const communityMembers = async () => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return null;
+
+  try {
+    const response = await api.get("community/community-user/");
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+// bog post create api for user
+const BlogPostCreateApi = async (data, slug) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return null;
+
+  try {
+    const response = await api.post(`community/blogpost/create/${slug}/`, data);
+
+    return {
+      ok: true,
+      message: response.data?.message || "Blog post created successfully",
+    };
+  } catch (error) {
+    return {
+      data: {
+        ok: false,
+        error: error.response?.data,
+      },
+    };
+  }
+};
+
+const ListBlogPostApi = async () => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return [];
+
+  try {
+    const response = await api.get("community/blogpost/");
+    console.log("message", response.data);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+const ListCommunityBlogPostApi = async (slug) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return [];
+
+  try {
+    const response = await api.get(`community/${slug}/blogpost/`);
+    console.log("message", response.data);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export {
+  BlogPostCreateApi,
+  communityDetails,
+  communityMembers,
+  ListBlogPostApi,
+  ListCommunityBlogPostApi,
+};

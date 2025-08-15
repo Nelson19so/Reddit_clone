@@ -2,23 +2,18 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from .models import CustomUser, Profile
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-import re
-from django.utils.text import slugify
 from django.contrib.auth import authenticate
 
 # defines the get user
 User = get_user_model()
 
 # user profile serializer create
-class UserProfileViewSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
+class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Profile
-        fields = ('username', 'email')
-        read_only = ['id']
+        model = User
+        fields = ['id', 'username', 'email']
+        read_only_fields = ['pk']
 
 '''''
 user registration serializer create

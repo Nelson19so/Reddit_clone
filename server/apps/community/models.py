@@ -48,7 +48,7 @@ class BlogPostCategory(models.Model):
     def __str__(self):
         return self.category
 
-# blog post model
+# blog post user model
 class BlogPost(models.Model):
     community = models.ManyToManyField(Community, related_name='community_posts')
     author = models.ForeignKey(

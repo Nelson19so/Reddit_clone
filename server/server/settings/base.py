@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     # Third-party applications
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
+
     # 'dj_rest_auth',
     'dj_rest_auth.registration',
     'allauth',
@@ -134,9 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = [
-    BASE_DIR / 'media'
-]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -178,6 +178,8 @@ SOCIALACCOUNT_PROVIDERS = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 # REST_AUTH = {

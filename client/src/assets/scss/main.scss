@@ -6,6 +6,7 @@
 @use "./components/navbar" as navbar;
 @use "./components/sidebar" as sidebar;
 @use "./components/post" as post;
-@use "./components/componenet" as component;
+@use "./components/component" as component;
+@use "./components/form" as form;
 
 @use "./pages/auth" as auth;

@@ -5,13 +5,16 @@ from rest_framework.permissions import (
 )
 from .serializers     import (
     CommentSerializer, CommunitySerializer, 
-    VoteSerializerCreate, BlogPostSerializer
+    VoteSerializerCreate, BlogPostSerializer,
+    BlogPostListSerializer
 )
 from .models import BlogPost, Comment, Community
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http          import Http404
 from django.contrib.auth  import get_user_model
+from rest_framework.parsers import MultiPartParser
+from rest_framework.exceptions import ValidationError
 
 
 # getting user model
@@ -41,6 +44,7 @@ class PostCommentView(generics.CreateAPIView):
             'message': 'Comment created successfully',
             'data': serializer.data,
         }, status=status.HTTP_201_CREATED)
+
 
 # community view create
 class CommunityViewCreate(APIView):
@@ -202,11 +206,11 @@ class CommunityListView(APIView):
 class CommunityDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Community.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = CommunitySerializer
     lookup_field = 'slug'
 
 
-# create vote for post
+# Blog Post vote api view create
 class BlogPostVoteApiView(generics.CreateAPIView):
     serializer_class = VoteSerializerCreate
     permission_classes = [IsAuthenticated]
@@ -240,31 +244,32 @@ class BlogPostVoteApiView(generics.CreateAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-# blog post create api view
+# blog post api view create
 class BloPostCreateApiView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = BlogPostSerializer
+    parser_classes = [MultiPartParser]
 
     def perform_create(self, serializer):
         author = self.request.user
-        slug = self.kwargs.get('slug')
-        community = generics.get_object_or_404(Community, slug=slug)
+        community_slug = self.kwargs.get('slug')
+
+        community = get_object_or_404(Community, slug=community_slug)
+
+        if not community.members.filter(id=author.id).exists():
+            raise ValidationError({'community': 'You are not a member of this community'})
         
-        return serializer.save(author=author, community=community)
+        blogpost = serializer.save(author=author)
+        blogpost.community.set([community])
 
     # handle post request from users
-    def post(self, request, *args, **kwargs):
-        author = request.user
-        serializer = self.get_serializer(data=request.data, context={
-            'author': author, 'request': request
-        })
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+
         return Response({
             'success': True,
             'message': 'You have successfully posted a blog post',
-        }, status=status.HTTP_200_OK)
+        }, status=status.HTTP_201_CREATED)
 
 
 # blog post update and delete api view
@@ -329,37 +334,36 @@ class BlogPostUpdateDeleteApiView(APIView):
         
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+
 # general blog post list for all users
 class BlogPostListApiView(generics.ListAPIView):
     queryset = BlogPost.objects.all().order_by('created_at').prefetch_related('blog_vote')
-    serializer_class = BlogPostSerializer
+    serializer_class = BlogPostListSerializer
     permission_classes = [AllowAny]
+
 
 # list community blog post for user
 class CommunityBlogPostListApiView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # re-usable component to get blogpost
-    def get_object(self, community_slug, community):
-        try:
-
-            return BlogPost.objects.filter(community=community)
-
-        except BlogPost.DoesNotExist():
-            return Http404
-
     # listing all blogpost related to a community
-    def get(self, request, community_slug):
+    def get(self, request, *args, **kwargs):
+        community_slug = kwargs.get('community_slug')
 
         try:
-            
-            community = Community.objects.get(slug=community_slug)
-            blogpost = self.get_object(community)
-            
-        except Community.DoesNotExist:
-            community = Community.objects.none()
 
-        serializer = CommunitySerializer(blogpost, many=True)
+            community = Community.objects.get(slug=community_slug)
+
+        except Community.DoesNotExist:
+            return Response({
+                'success': False,
+                'message': 'Community no found',
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        blogpost = BlogPost.objects.filter(community=community)
+        serializer = BlogPostListSerializer(blogpost, many=True, context={
+            'request': request
+        })
         
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -371,23 +375,16 @@ class DisplayMembersCommunityApiView(APIView):
     def get(self, request):
         user = request.user
 
-        try:
+        community = Community.objects.filter(members=user)
 
-            community = Community.objects.filter(members=user)
+        if community.exists():
+            serializer = CommunitySerializer(community, many=True, context={'request': request})
 
-            if community.exists():
-                serializer = CommunitySerializer(community, many=True, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        return Response({
+            'success': False,
+            'message': 'No subreddit found yet',
+        }, status=status.HTTP_404_NOT_FOUND)
 
-                return Response(serializer.data, status=status.HTTP_200_OK)
-                
-            return Response({
-                'success': False,
-                'message': 'No subreddit found yet',
-            }, status=status.HTTP_404_NOT_FOUND)
-
-        except Community.DoesNotExist:
-            return Response({
-                'success': False,
-                'message': 'No subreddit found yet',
-            }, status=status.HTTP_404_NOT_FOUND)
                 

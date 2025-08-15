@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import logo from "../../../../assets/images/reddit-1.png";
 
-export default function Navbar({ handleSidebar }) {
+export default function Navbar({ handleSidebar, communityDetail }) {
   const [reddit, setIsReddit] = useState(false);
   const [listFilter, setListFilter] = useState(true);
   const [toggle, setToggle] = useState(false);
@@ -67,7 +67,7 @@ export default function Navbar({ handleSidebar }) {
                 </svg>
               </button>
             </Link>
-            <p>Today I Learned</p>
+            {communityDetail && <p>{communityDetail.name}</p>}
           </div>
 
           <div className="container_sub_subscribe flex justify-start gap-3">

@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 
-export default function Post({ title, subreddit, author, img, slug }) {
+export default function Post({
+  title,
+  subreddit,
+  author,
+  img,
+  slug,
+  communitySlug,
+}) {
   const handleShare = () => {
     if (navigator.share) {
       navigator
@@ -17,7 +24,7 @@ export default function Post({ title, subreddit, author, img, slug }) {
   };
 
   return (
-    <div className="__grid-item reddit_post shadow-sm bg-white">
+    <div className="__grid-item reddit_post bg-white">
       {img && (
         <img src={img} alt={author} className="w-full h-auto object-cover" />
       )}
@@ -33,7 +40,7 @@ export default function Post({ title, subreddit, author, img, slug }) {
         </span>
         <p className="group-name">
           <span>/r/</span>
-          <Link>{subreddit}</Link>
+          <Link to={`/community/${communitySlug}/`}>{subreddit}</Link>
         </p>
 
         <div className="__post-detail-container flex justify-around mt-1">

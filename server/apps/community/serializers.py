@@ -63,53 +63,86 @@ class VoteSerializerCreate(serializers.ModelSerializer):
         )
 
         return vote
-        
 
-# blog post create serializer
-class BlogPostSerializer(serializers.ModelSerializer):
+
+class BlogPostListSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+    communities = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name',
+        source='community'
+    )
 
     class Meta:
         model = BlogPost
-        fields = ['id', 'author', 'community', 'title', 'content', 'image']
+        fields = ['id', 'title', 'content', 'image', 'author', 'communities', 'created_at']
+
+    # def get_image(self, obj):
+    #     request = self.context.get('request')
+
+    #     if obj.image:
+    #         return request.build_absolute_url(obj.image.url)
+        
+    #     return None
+
+
+# blog post create serializer
+class BlogPostSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=True, error_messages={
+        'required': 'Title field is required',
+        'blank': 'Title field cannot be empty'
+    })
+
+    class Meta:
+        model = BlogPost
+        fields = ['author', 'community', 'title', 'content', 'image']
+        read_only_fields = ['author', 'community']
 
     # getting the blogpost author returning none if not author
     def get_is_author(self, obj):
         request = self.context.get('request')
         return request.user if obj.author == request.user else None
 
-    # handling the user data validation
-    def validate(self, data):
-        author = self.context.get('author')
-        
+    def validate_title(self, value):
         # validating the length of the title
-        if len(data['title']) <= 5:
-            raise serializers.ValidationError({
-                'title': 'Title should be at least up to 5 characters in length'
-            })
-        
+        if len(value) <= 5:
+            raise serializers.ValidationError('Title field is too short')
+        return value
+    
+    def validate_content(self, value):
         # validate the length of content
-        if len(data['content']) <= 5:
+        if len(value) <= 5:
             raise serializers.ValidationError({
-                'content': 'Content should be at least up to 5 characters in length'
+                'content': 'Content field is too short'
             })
-        
-        # restrict how often a user can post to prevent spamming
-        five_minute_ago = now() - timedelta(minutes=5)
-        
-        recent = BlogPost.objects.filter(
-            author=author, created_at=five_minute_ago
-        )
-        if recent.exists():
-            raise serializers.ValidationError(
-                "You're posting too frequently. Please wait a for 5 more minute to post"
-            )
-        
+        return value
+
+    # checks if the user is the member of the community
     def validate_community(self, value):
         user = self.context.get('author')
 
         if not user in value.members.filter(id=user.id).exits():
             raise serializers.ValidationError('You are not a member of this community.')
         return value
+
+    # handling the user data validation
+    def validate(self, attrs):
+        author = self.context.get('author')
+
+        # restrict how often a user can post to prevent spamming
+        five_minute_ago = now() - timedelta(minutes=5)
+        
+        recent = BlogPost.objects.filter(
+            author=author, created_at=five_minute_ago
+        )
+
+        if recent.exists():
+            raise serializers.ValidationError(
+                "You're posting too frequently. Please wait a for 5 more minute to post"
+            )
+
+        return attrs
 
     # handles the user posting the bog on create
     def create(self, validated_data):

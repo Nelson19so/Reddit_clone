@@ -19,8 +19,8 @@
   position: fixed;
   background-color: #ffff;
   z-index: 66666;
-  transition: 1s;
-  animation: 1s ease-in-out;
+  transition: 0.5s;
+  animation: 0.5s ease-in-out;
 
   @media only screen and (max-width: 1061px) {
     left: -256px;

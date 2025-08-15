@@ -5,6 +5,30 @@
   border-radius: 100px;
   padding: 10px;
   background-color: #cfcfcf;
+  z-index: 88888;
+  animation: 1s ease-in-out;
+}
+
+.rotate-create-svg {
+  transform: rotate(125deg);
+}
+
+.base_btn {
+  padding: 7px 50px;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  background-color: #ff4500;
+  cursor: pointer;
+  animation: 1s ease-in-out;
+  transition: 1s;
+  border: 4px solid #ff9d79;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.base_btn:hover {
+  transform: scaleY(1.1);
+  background-color: rgba(255, 72, 5, 0.8352941176);
 }
 
 body,
@@ -88,19 +112,20 @@ html {
   transition: 1s;
   display: none;
 }
-
-@media only screen and (max-width: 1061px) {
-  .modal-active {
-    opacity: 1;
-    display: block;
+@media only screen and (min-width: 1061px) {
+  .main-modal_ {
+    z-index: 77777;
   }
 }
 
-@media only screen and (max-width: 1061px) {
-  .disabled-modal {
-    opacity: 0;
-    display: none;
-  }
+.modal-active {
+  opacity: 1;
+  display: block;
+}
+
+.disabled-modal {
+  opacity: 0;
+  display: none;
 }
 
 .__container-navbar {
@@ -261,8 +286,8 @@ html {
   position: fixed;
   background-color: white;
   z-index: 66666;
-  transition: 1s;
-  animation: 1s ease-in-out;
+  transition: 0.5s;
+  animation: 0.5s ease-in-out;
 }
 @media only screen and (max-width: 1061px) {
   .container_sidebar {
@@ -335,13 +360,17 @@ html {
   align-items: center;
 }
 
+.reddit_post {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+}
 .reddit_post .title {
   font-size: 15px;
   width: auto;
 }
 @media only screen and (max-width: 450px) {
   .reddit_post .title {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 .reddit_post .__post-about {
@@ -380,7 +409,7 @@ html {
   padding: 10px 25px;
   width: fit-content;
   position: absolute;
-  z-index: 22;
+  z-index: 99999;
   right: 12px;
   top: 12px;
   border-radius: 5px;
@@ -400,6 +429,63 @@ html {
 .container-success-msg {
   background-color: #32cd32;
   border-bottom: 5px solid #008000;
+}
+
+.container-blogpost-form {
+  position: fixed;
+  display: flex;
+  justify-self: center;
+  z-index: 88888;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  top: -150vh;
+  width: 420px;
+  transition: 0.3s ease-in-out;
+}
+.container-blogpost-form .container-blogpost-form-wrapper header {
+  border-bottom: 1px solid #e5e5e5;
+  align-items: center;
+}
+.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form label {
+  font-size: small;
+  color: rgb(35, 35, 35);
+}
+.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form input,
+.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+  padding: 10px 20px;
+  border-radius: 20px;
+  outline: none;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+}
+.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
+  height: 160px;
+  border-radius: 20px;
+}
+.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form .btn-upload-img {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+  width: 55px;
+  height: 55px;
+  border-radius: 100px;
+  border: 1px solid #e5e5e5;
+}
+
+.active-form {
+  top: 80px !important;
+}
+@media only screen and (max-width: 559px) {
+  .active-form {
+    width: 393px;
+    top: 100px !important;
+  }
+}
+@media only screen and (max-width: 445px) {
+  .active-form {
+    width: 90vw;
+    top: 100px !important;
+  }
 }
 
 body {

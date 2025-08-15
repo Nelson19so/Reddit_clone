@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views    import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializer import (
-    UserProfileViewSerializer, UserRegistrationSerializer, 
+    UserProfileSerializer, UserRegistrationSerializer, 
     UserLoginSerializerCreate
 )
 from django.contrib.auth     import get_user_model
@@ -17,12 +17,14 @@ from rest_framework_simplejwt.views      import TokenRefreshView
 User = get_user_model()
 
 
-# user profile view
-class UserProfileView(generics.RetrieveAPIView):
-    serializer_class = UserProfileViewSerializer
+# user mail view page view
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
+
 
 '''''
 user account registration view create
@@ -72,6 +74,7 @@ class UserRegistrationViewCreate(generics.CreateAPIView):
             # returns a bad request status
         }, status=status.HTTP_400_BAD_REQUEST)
 
+
 '''''
 User account log in view create
 '''''
@@ -112,6 +115,7 @@ class UserLoginViewCreate(APIView):
             'message': serializer.errors
         }, status=status.HTTP_404_NOT_FOUND)
 
+
 # user log out view for user 
 class LogOutUserView(APIView):
     # only allow authenticated users to use this view
@@ -139,6 +143,7 @@ class LogOutUserView(APIView):
                 'message': 'Refresh token is required'
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
 # delete account view create for authenticated users
 class UserDeleteViewCreate(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -156,21 +161,25 @@ class UserDeleteViewCreate(generics.DestroyAPIView):
             'message': 'User deleted successfully',
         }, status=status.HTTP_204_NO_CONTENT)
 
-# token verify api view
+
+# token verify api view for users
 class UserTokenVerifyView(APIView):
     def post(self, request):
         token = request.data.get('token')
         try:
+            
             token = AccessToken(token)
             return Response({
                 'message': 'Token is valid',
                 'success': True,
             }, status=status.HTTP_200_OK)
+
         except TokenError:
             return Response({
                 'success': False,
                 'message': 'Invalid or expire token',
             }, status=status.HTTP_401_UNAUTHORIZED)
+
 
 # custom JWT refreshed access token for user
 class CustomTokenRefreshView(TokenRefreshView):

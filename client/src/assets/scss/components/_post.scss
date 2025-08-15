@@ -1,12 +1,16 @@
 .reddit_post {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+
   .title {
     font-size: 15px;
     width: auto;
 
     @media only screen and (max-width: 450px) {
-      font-size: 12px;
+      font-size: 13px;
     }
   }
+
   .__post-about {
     color: #414141;
     font-size: 12px;

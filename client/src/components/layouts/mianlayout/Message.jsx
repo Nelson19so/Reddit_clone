@@ -6,6 +6,7 @@ export default function Message({ error, success, showError, showSuccess }) {
           showError ? "container-error-msg" : "container-success-msg"
         }`}
       >
+        {/* {showError ? <span>{error}</span> : <span>{success}</span>} */}
         {showError && <span>{error}</span>}
         {showSuccess && <span>{success}</span>}
       </div>
