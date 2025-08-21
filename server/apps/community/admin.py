@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Community, BlogPost
+from .models import Community, BlogPost, BlogPostCategory
 
 
 @admin.register(Community)
@@ -18,3 +18,4 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ('community', 'title', 'created_at', 'updated_at')
     search_fields = ['title']
     readonly_fields = ['id', 'slug', 'updated_at', 'created_at']
+

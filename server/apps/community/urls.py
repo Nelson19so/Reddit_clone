@@ -5,7 +5,8 @@ from .views import (
     CommunityViewCreate,  BlogPostVoteApiView,
     BloPostCreateApiView, BlogPostUpdateDeleteApiView,
     BlogPostListApiView,  CommunityBlogPostListApiView,
-    DisplayMembersCommunityApiView,
+    DisplayMembersCommunityApiView, BlogPostDetailsApiView,
+    LeaveCommunityView,   JoinCommunityViewCreate
 )
 
 urlpatterns = [
@@ -22,8 +23,11 @@ urlpatterns = [
     ),
     path('blogpost/', BlogPostListApiView.as_view(), name='BlogPostList'),
     path(
-        '<slug:community_slug>/blogpost/', 
+        '<slug:community_slug>/blogpost/',
         CommunityBlogPostListApiView.as_view(), name='community_blogpost'
     ),
+    path('blogpost/<slug:slug>/', BlogPostDetailsApiView.as_view(), name='blogpost_details'),
     path('community-user/', DisplayMembersCommunityApiView.as_view(), name='members-community'),
+    path('leave-community/<slug:slug>/', LeaveCommunityView.as_view(), name='leave_community'),
+    path('join-community/<slug:slug>/', JoinCommunityViewCreate.as_view(), name='leave_community')
 ]

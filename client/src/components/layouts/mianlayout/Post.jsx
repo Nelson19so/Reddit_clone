@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Post({
   title,
@@ -7,6 +8,7 @@ export default function Post({
   img,
   slug,
   communitySlug,
+  timePosted,
 }) {
   const handleShare = () => {
     if (navigator.share) {
@@ -14,7 +16,7 @@ export default function Post({
         .share({
           img,
           title,
-          url: `${window.location.origin}/blogpost/${slug}`,
+          url: `${window.location.origin}/blogpost_details/${slug}/`,
         })
         .then(() => console.log("Shared successfully"))
         .catch((err) => console.error("Error sharing:", err));
@@ -29,12 +31,13 @@ export default function Post({
         <img src={img} alt={author} className="w-full h-auto object-cover" />
       )}
       <article className="p-4">
-        <Link to={`/blogpost_details/${slug}`}>
+        <Link to={`/blogpost_details/${slug}/`}>
           <p className="title">{title}</p>
         </Link>
         <span className="__post-about">
-          6 hours ago by{" "}
-          <p className="author">
+          {formatDistanceToNow(new Date(timePosted), { addSuffix: true })}
+          by
+          <p className="author ml-1">
             <Link>{author}</Link>
           </p>
         </span>

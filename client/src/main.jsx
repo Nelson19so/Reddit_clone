@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
+// import App from "./App.jsx";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
@@ -9,6 +9,7 @@ import BlogpostDetails from "./pages/reddit/BlogpostDetails.jsx";
 import Register from "./pages/auth/Register.jsx";
 import ProtectedRoute from "./components/layouts/authlayout/ProtectedRoute.jsx";
 import LogoutUser from "./components/layouts/authlayout/LogoutUser.jsx";
+import PageNoteFound from "./pages/PageNoteFound.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -33,6 +34,8 @@ createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<PageNoteFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

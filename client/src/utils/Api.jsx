@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshToken } from "./accounts/Authservice";
+import { data } from "react-router-dom";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api/",
@@ -86,8 +87,10 @@ const BlogPostCreateApi = async (data, slug) => {
     const response = await api.post(`community/blogpost/create/${slug}/`, data);
 
     return {
-      ok: true,
-      message: response.data?.message || "Blog post created successfully",
+      data: {
+        ok: true,
+        message: response.data?.message || "Blog post created successfully",
+      },
     };
   } catch (error) {
     return {
@@ -99,6 +102,7 @@ const BlogPostCreateApi = async (data, slug) => {
   }
 };
 
+// List all blogs for api's
 const ListBlogPostApi = async () => {
   const access = localStorage.getItem("access");
 
@@ -106,13 +110,13 @@ const ListBlogPostApi = async () => {
 
   try {
     const response = await api.get("community/blogpost/");
-    console.log("message", response.data);
     return response.data;
   } catch (error) {
     return [];
   }
 };
 
+// list blog post for each communities communities
 const ListCommunityBlogPostApi = async (slug) => {
   const access = localStorage.getItem("access");
 
@@ -120,10 +124,68 @@ const ListCommunityBlogPostApi = async (slug) => {
 
   try {
     const response = await api.get(`community/${slug}/blogpost/`);
-    console.log("message", response.data);
     return response.data;
   } catch (error) {
     return [];
+  }
+};
+
+// list blog post for each communities communities
+const BlogPostDetailsApi = async (slug) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return null;
+
+  try {
+    const response = await api.get(`community/blogpost/${slug}/`);
+    return {
+      ok: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      data: null,
+    };
+  }
+};
+
+// list blog post for each communities communities
+const leaveCommunityApi = async (slug) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return null;
+
+  try {
+    const response = await api.post(`community/leave-community/${slug}/`);
+    return {
+      ok: true,
+      message: response.data,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error.response?.data,
+    };
+  }
+};
+
+const joinCommunityApi = async (slug) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return null;
+
+  try {
+    const response = await api.post(`community/join-community/${slug}/`);
+    return {
+      ok: true,
+      message: response.data,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error.response?.data,
+    };
   }
 };
 
@@ -133,4 +195,7 @@ export {
   communityMembers,
   ListBlogPostApi,
   ListCommunityBlogPostApi,
+  BlogPostDetailsApi,
+  leaveCommunityApi,
+  joinCommunityApi,
 };

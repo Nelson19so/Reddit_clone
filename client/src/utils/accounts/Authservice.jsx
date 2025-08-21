@@ -63,10 +63,8 @@ export const refreshToken = async () => {
   try {
     const refresh = localStorage.getItem("refresh");
     const response = await axios.post(`${API_URL}token/refresh/`, { refresh });
-
     return response.data;
   } catch (refreshError) {
-    console.error("Refresh failed", refreshError);
     logout();
     window.location.href = "/login";
     return null;
@@ -86,7 +84,6 @@ export const userProfile = async () => {
     });
     return response.data;
   } catch (err) {
-    console.error("error", err);
     return null;
   }
 };

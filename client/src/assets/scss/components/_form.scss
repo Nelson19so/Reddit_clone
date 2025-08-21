@@ -1,63 +1,78 @@
-.container-blogpost-form {
-  position: fixed;
+.overall-container {
+  position: absolute;
+  z-index: 88888;
   display: flex;
   justify-self: center;
-  z-index: 88888;
-  border-radius: 5px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   top: -150vh;
-  width: 420px;
   transition: 0.3s ease-in-out;
+  overflow-y: scroll;
+  height: 100vh;
+  background-color: transparent;
+  padding-top: 20px;
+  padding-bottom: 20px;
 
-  .container-blogpost-form-wrapper {
-    header {
-      border-bottom: 1px solid #e5e5e5;
-      align-items: center;
-    }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-    .container-blog-form {
-      label {
-        font-size: small;
-        color: rgb(35, 35, 35);
+  .container-blogpost-form {
+    display: flex;
+    justify-self: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 420px;
+    height: fit-content;
+
+    .container-blogpost-form-wrapper {
+      header {
+        border-bottom: 1px solid #e5e5e5;
+        align-items: center;
       }
 
-      input,
-      textarea {
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
-        border: 1px solid #e5e5e5;
-        padding: 10px 20px;
-        border-radius: 20px;
-        outline: none;
-        width: 100%;
-        border: 1px solid #e5e5e5;
-      }
+      .container-blog-form {
+        label {
+          font-size: small;
+          color: rgb(35, 35, 35);
+        }
 
-      textarea {
-        height: 160px;
-        border-radius: 20px;
-      }
+        input,
+        textarea {
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+          border: 1px solid #e5e5e5;
+          padding: 10px 20px;
+          border-radius: 20px;
+          outline: none;
+          width: 100%;
+          border: 1px solid #e5e5e5;
+        }
 
-      .btn-upload-img {
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
-        width: 55px;
-        height: 55px;
-        border-radius: 100px;
-        border: 1px solid #e5e5e5;
+        textarea {
+          height: 160px;
+          border-radius: 20px;
+        }
+
+        .btn-upload-img {
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+          width: 50px;
+          height: 50px;
+          border-radius: 100px;
+          border: 1px solid #e5e5e5;
+        }
       }
     }
   }
 }
 
 .active-form {
-  top: 80px !important;
+  top: 0px !important;
 
   @media only screen and (max-width: 559px) {
     width: 393px;
-    top: 100px !important;
+    top: 20px !important;
   }
 
   @media only screen and (max-width: 445px) {
     width: 90vw;
-    top: 100px !important;
+    top: 20px !important;
   }
 }

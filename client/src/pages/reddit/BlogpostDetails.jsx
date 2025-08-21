@@ -1,10 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BlogPostDetailsApi } from "../../utils/Api";
+import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
 import Comment from "../../components/layouts/comment";
 import img from "../../assets/images/Image5.png";
+import UseAccessToken from "../../components/layouts/authlayout/UseAccessToken";
 
 function BlogpostDetails() {
+  const [blogPost, setBlogPost] = useState(null);
+
+  const { slug } = useParams();
+
+  const [access] = UseAccessToken();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const BlogPostApi = async (slug) => {
+      if (!access) return null;
+
+      const response = await BlogPostDetailsApi(slug);
+
+      if (response.ok) {
+        setBlogPost(response.data);
+      } else {
+        navigate("/404");
+      }
+    };
+
+    BlogPostApi(slug);
+  }, [slug, access]);
+
   return (
     <Layout>
       <div className="container-articles border-b border-gray-300 md:pl-[130px] pl-[10px] pr-[10px] md:pr-[130px] pt-7 pb-7">
@@ -44,13 +72,18 @@ function BlogpostDetails() {
             </div>
           </div>
           <div className="container-title-txt flex justify-start gap-1 flex-col">
-            <p className="text-xl text-black">
-              TIL millennials aren't buying diamonds anymore - millennials would
-              rather spend money on experiences than diamonds
-            </p>
+            <p className="text-xl text-black">{blogPost && blogPost.title}</p>
             <div className="__container">
               <p className="font-grey">
-                6 hours ago by <Link>the_big_mothergoose</Link>
+                {blogPost && (
+                  <>
+                    {formatDistanceToNow(new Date(blogPost.created_at), {
+                      addSuffix: true,
+                    })}
+                  </>
+                )}{" "}
+                by
+                <Link className="ml-1">{blogPost && blogPost.author}</Link>
               </p>
             </div>
 
@@ -77,7 +110,17 @@ function BlogpostDetails() {
 
         {/* img */}
         <div className="container-post-img mt-8 pl-14">
-          <img src={img} alt="image" />
+          {blogPost && (
+            <>
+              {blogPost.image && (
+                <img
+                  src={blogPost.image}
+                  alt="image"
+                  style={{ width: "80%" }}
+                />
+              )}
+            </>
+          )}
         </div>
       </div>
 

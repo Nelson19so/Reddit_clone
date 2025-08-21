@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { communityDetails } from "../../utils/Api";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import { BlogPostDetailsApi, communityDetails } from "../../utils/Api";
 
 import Sidebar from "./mianlayout/Sidebar";
 import Navbar from "./mianlayout/navbar/Navbar";
@@ -21,6 +26,8 @@ const Layout = ({ children }) => {
   const location = useLocation();
 
   const [access] = UseAccessToken();
+
+  const navigate = useNavigate();
 
   // Helps toggle toggle modal for user and also set blog form to false if it is true
   const handleShowModal = () => {
@@ -59,9 +66,23 @@ const Layout = ({ children }) => {
       setCommunityDetail(response);
     };
 
+    const handlesBlogPostDetails = async () => {
+      setCommunityDetail(null);
+      const response = await BlogPostDetailsApi(slug);
+
+      if (response.ok) {
+        setCommunityDetail(response.data);
+      } else {
+        navigate("/404");
+      }
+    };
+
     // checks if we are in community page
     if (location.pathname === `/community/${slug}/`) {
       handlesCommunityDetails(slug);
+    }
+    if (location.pathname === `/blogpost_details/${slug}/`) {
+      handlesBlogPostDetails(slug);
     }
   }, [access, slug]);
 

@@ -96,8 +96,8 @@ html {
 }
 
 .no-scroll {
-  overflow: hidden;
-  height: 100vh;
+  overflow: hidden !important;
+  height: 100vh !important;
 }
 
 .main-modal_ {
@@ -431,27 +431,40 @@ html {
   border-bottom: 5px solid #008000;
 }
 
-.container-blogpost-form {
-  position: fixed;
+.overall-container {
+  position: absolute;
+  z-index: 88888;
   display: flex;
   justify-self: center;
-  z-index: 88888;
+  top: -150vh;
+  transition: 0.3s ease-in-out;
+  overflow-y: scroll;
+  height: 100vh;
+  background-color: transparent;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.overall-container::-webkit-scrollbar {
+  display: none;
+}
+.overall-container .container-blogpost-form {
+  display: flex;
+  justify-self: center;
   border-radius: 5px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  top: -150vh;
   width: 420px;
-  transition: 0.3s ease-in-out;
+  height: fit-content;
 }
-.container-blogpost-form .container-blogpost-form-wrapper header {
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper header {
   border-bottom: 1px solid #e5e5e5;
   align-items: center;
 }
-.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form label {
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper .container-blog-form label {
   font-size: small;
   color: rgb(35, 35, 35);
 }
-.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form input,
-.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper .container-blog-form input,
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
   border: 1px solid #e5e5e5;
   padding: 10px 20px;
@@ -460,31 +473,31 @@ html {
   width: 100%;
   border: 1px solid #e5e5e5;
 }
-.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper .container-blog-form textarea {
   height: 160px;
   border-radius: 20px;
 }
-.container-blogpost-form .container-blogpost-form-wrapper .container-blog-form .btn-upload-img {
+.overall-container .container-blogpost-form .container-blogpost-form-wrapper .container-blog-form .btn-upload-img {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 100px;
   border: 1px solid #e5e5e5;
 }
 
 .active-form {
-  top: 80px !important;
+  top: 0px !important;
 }
 @media only screen and (max-width: 559px) {
   .active-form {
     width: 393px;
-    top: 100px !important;
+    top: 20px !important;
   }
 }
 @media only screen and (max-width: 445px) {
   .active-form {
     width: 90vw;
-    top: 100px !important;
+    top: 20px !important;
   }
 }
 

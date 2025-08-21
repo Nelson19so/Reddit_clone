@@ -39,13 +39,11 @@ function Register() {
 
     if (!response.ok) {
       setError(response.data.error);
-      console.log(response.data.error);
       setTimeout(() => {
         setError({});
       }, 5000);
     } else {
       // setSuccess("User created successfully");
-      console.log("Backend Response", response.message);
       setSuccess(response.message);
       setTimeout(() => {
         setSuccess(null);

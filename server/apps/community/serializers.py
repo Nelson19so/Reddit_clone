@@ -24,15 +24,18 @@ class CommentSerializer(serializers.Serializer):
 
 # blog post serializer create
 class CommunitySerializer(serializers.ModelSerializer):
+    is_member = serializers.SerializerMethodField()
 
     class Meta:
         model = Community
-        fields = ['id', 'slug', 'name', 'description', 'created', 'owner']
+        fields = ['id', 'slug', 'name', 'description', 'created', 'owner', 'is_member']
         read_only = ['id', 'slug', 'created']
 
-    def get_is_members(self, obj):
+    def get_is_member(self, obj):
         request = self.context.get('request')
-        return request.user in obj.members.all() if request.user.is_authenticated else False
+        if request.user.is_authenticated:
+            return obj.members.filter(id=request.user.id).exists()
+        return False
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -65,8 +68,9 @@ class VoteSerializerCreate(serializers.ModelSerializer):
         return vote
 
 
-class BlogPostListSerializer(serializers.ModelSerializer):
+class BlogPostSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source='author.username', read_only=True)
+    created_at = serializers.DateTimeField(format='%Y-%m-%dt%H:%M:%S')
     communities = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -76,22 +80,18 @@ class BlogPostListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BlogPost
-        fields = ['id', 'title', 'content', 'image', 'author', 'communities', 'created_at']
-
-    # def get_image(self, obj):
-    #     request = self.context.get('request')
-
-    #     if obj.image:
-    #         return request.build_absolute_url(obj.image.url)
-        
-    #     return None
+        fields = ['id', 'title', 'slug', 'content', 'image', 'author', 'communities', 'created_at']
 
 
 # blog post create serializer
-class BlogPostSerializer(serializers.ModelSerializer):
+class BlogPostCreateSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True, error_messages={
         'required': 'Title field is required',
         'blank': 'Title field cannot be empty'
+    })
+    content = serializers.CharField(required=True, error_messages={
+        'required': 'Content field is required',
+        'blank': 'Content field cannot be empty'
     })
 
     class Meta:
@@ -113,9 +113,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
     def validate_content(self, value):
         # validate the length of content
         if len(value) <= 5:
-            raise serializers.ValidationError({
-                'content': 'Content field is too short'
-            })
+            raise serializers.ValidationError('Content field is too short')
         return value
 
     # checks if the user is the member of the community

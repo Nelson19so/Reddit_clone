@@ -5,8 +5,8 @@ from rest_framework.permissions import (
 )
 from .serializers     import (
     CommentSerializer, CommunitySerializer, 
-    VoteSerializerCreate, BlogPostSerializer,
-    BlogPostListSerializer
+    VoteSerializerCreate, BlogPostCreateSerializer,
+    BlogPostSerializer
 )
 from .models import BlogPost, Comment, Community
 from rest_framework.response import Response
@@ -247,7 +247,7 @@ class BlogPostVoteApiView(generics.CreateAPIView):
 # blog post api view create
 class BloPostCreateApiView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = BlogPostSerializer
+    serializer_class = BlogPostCreateSerializer
     parser_classes = [MultiPartParser]
 
     def perform_create(self, serializer):
@@ -338,7 +338,7 @@ class BlogPostUpdateDeleteApiView(APIView):
 # general blog post list for all users
 class BlogPostListApiView(generics.ListAPIView):
     queryset = BlogPost.objects.all().order_by('created_at').prefetch_related('blog_vote')
-    serializer_class = BlogPostListSerializer
+    serializer_class = BlogPostSerializer
     permission_classes = [AllowAny]
 
 
@@ -360,12 +360,21 @@ class CommunityBlogPostListApiView(APIView):
                 'message': 'Community no found',
             }, status=status.HTTP_404_NOT_FOUND)
         
-        blogpost = BlogPost.objects.filter(community=community)
-        serializer = BlogPostListSerializer(blogpost, many=True, context={
+        blogpost = BlogPost.objects.filter(community=community).only(
+            'title', 'slug', 'image', 'community', 'author', 
+        )
+        serializer = BlogPostSerializer(blogpost, many=True, context={
             'request': request
         })
         
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# blog post details
+class BlogPostDetailsApiView(generics.RetrieveAPIView):
+    queryset = BlogPost.objects.all()
+    serializer_class = BlogPostSerializer
+    lookup_field = 'slug'
 
 
 # displays community for members in community for authenticated users
@@ -386,5 +395,3 @@ class DisplayMembersCommunityApiView(APIView):
             'success': False,
             'message': 'No subreddit found yet',
         }, status=status.HTTP_404_NOT_FOUND)
-
-                

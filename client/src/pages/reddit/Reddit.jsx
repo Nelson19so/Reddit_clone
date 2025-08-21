@@ -83,6 +83,7 @@ function Reddit() {
                       title={post.title}
                       author={post.author}
                       subreddit={post.communities}
+                      timePosted={post.created_at}
                       communitySlug={post.communities[0]
                         ?.toLowerCase()
                         .replace(/ /g, "-")}
