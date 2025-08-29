@@ -5,7 +5,7 @@ import { logout } from "../../utils/accounts/Authservice";
 
 import Message from "../layouts/mianlayout/Message";
 
-export default function BlogpostForm({ handleBlogForm, blogForm }) {
+export default function BlogpostForm({ _handleCommunityBlogForm, blogForm }) {
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [image, setImage] = useState(null);
   const [errorMsg, setErrorMsg] = useState({});
@@ -69,9 +69,10 @@ export default function BlogpostForm({ handleBlogForm, blogForm }) {
             setSuccessMsg(null);
           }, 5000);
 
-          handleBlogForm();
+          _handleCommunityBlogForm();
 
           setFormData({ content: "", title: "" });
+          handleRemoveImage();
         } else {
           setErrorMsg(response.data.error);
 
@@ -124,7 +125,7 @@ export default function BlogpostForm({ handleBlogForm, blogForm }) {
                 <button
                   type="button"
                   className="cursor-pointer"
-                  onClick={handleBlogForm}
+                  onClick={_handleCommunityBlogForm}
                 >
                   <svg
                     fill="#000000"
@@ -178,11 +179,7 @@ export default function BlogpostForm({ handleBlogForm, blogForm }) {
                         />
                       </svg>
                     </button>
-                    <img
-                      src={image}
-                      alt="blog-image"
-                      style={{ width: "70%" }}
-                    />
+                    <img src={image} alt="blog-image" />
                   </div>
                 )}
 

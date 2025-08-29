@@ -1,26 +1,20 @@
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BlogPostDetailsApi } from "../../utils/Api";
 import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
 import Comment from "../../components/layouts/comment";
-import img from "../../assets/images/Image5.png";
-import UseAccessToken from "../../components/layouts/authlayout/UseAccessToken";
 
 function BlogpostDetails() {
   const [blogPost, setBlogPost] = useState(null);
 
   const { slug } = useParams();
 
-  const [access] = UseAccessToken();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const BlogPostApi = async (slug) => {
-      if (!access) return null;
-
       const response = await BlogPostDetailsApi(slug);
 
       if (response.ok) {
@@ -31,7 +25,7 @@ function BlogpostDetails() {
     };
 
     BlogPostApi(slug);
-  }, [slug, access]);
+  }, [slug, location.pathname]);
 
   return (
     <Layout>
@@ -46,6 +40,7 @@ function BlogpostDetails() {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="cursor-pointer"
               >
                 <path
                   d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"
@@ -54,7 +49,9 @@ function BlogpostDetails() {
                 />
               </svg>
 
-              <span className="number__">13k</span>
+              <span className="number__ text-center">
+                {blogPost && <>{blogPost.total_votes}</>}
+              </span>
 
               <svg
                 width="20"
@@ -62,6 +59,7 @@ function BlogpostDetails() {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="cursor-pointer"
               >
                 <path
                   d="M16.59 8.59L12 13.17L7.41 8.59L6 10L12 16L18 10L16.59 8.59Z"
@@ -130,7 +128,17 @@ function BlogpostDetails() {
           style={{ alignItems: "center" }}
         >
           <div>
-            <p className="text-sm text-black">2155 comments</p>
+            <p className="text-sm text-black">
+              {blogPost && (
+                <>
+                  {blogPost.comments_count === 0 ? (
+                    <>No comments yet</>
+                  ) : (
+                    <>{blogPost.comments_count} comments</>
+                  )}
+                </>
+              )}
+            </p>
           </div>
           <div className="right-container flex justify-end gap-5">
             <div

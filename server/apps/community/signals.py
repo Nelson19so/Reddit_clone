@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from .models import BlogPost, BlogPostCategory, BlogPostVote
 from django.utils.timezone import now, timedelta
@@ -23,6 +23,11 @@ def hot_blog_post(sender, instance, **kwargs):
     category_obj, created = BlogPostCategory.objects.get_or_create(category=category_value)
     post.category = category_obj
     post.save()
-        
-    
-    
+
+
+# Blog post signal notification
+@receiver(post_save, sender=BlogPost)
+def blog_post_create_notification(sender, instance, created, **kwargs):
+    if not instance.pk:
+        return
+

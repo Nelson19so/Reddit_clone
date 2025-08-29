@@ -52,23 +52,18 @@ class CommunityViewCreate(APIView):
 
     # handles post for creating community
     def post(self, request):
-        try:
+        serializer = CommunitySerializer(
+            data=request.data, context={'request': request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-            serializer = CommunitySerializer(data=request.data, context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            
-            return Response({
-                'message': 'community created successfully',
-                'success': True,
-            }, serializer.data, status=status.HTTP_201_CREATED)
+        return Response({
+            'message': 'community created successfully',
+            'success': True,
+            'data': serializer.data,
+        }, status=status.HTTP_201_CREATED)
 
-        except Community.DoesNotExist:
-            return Response({
-                'message': 'No community was found',
-                'success': False,
-            }, status=status.HTTP_400_BAD_REQUEST)
-            
 
 # Delete and update community view
 class CommunityUpdateDelete(APIView):
@@ -158,7 +153,7 @@ class JoinCommunityViewCreate(APIView):
             community.members.add(request.user)
             
             return Response({
-                'message': f'You have successfully joined {community.name}',
+                'message': f'You have successfully joined {community.name} community',
                 'success': True,
             }, status=status.HTTP_200_OK)
         
@@ -180,7 +175,7 @@ class LeaveCommunityView(APIView):
             community.members.remove(request.user)
             
             return Response({
-                'message': f'You have successfully left {community.name}',
+                'message': f'You have successfully left {community.name} community',
                 'success': True,
             }, status=status.HTTP_200_OK)
         
@@ -337,14 +332,14 @@ class BlogPostUpdateDeleteApiView(APIView):
 
 # general blog post list for all users
 class BlogPostListApiView(generics.ListAPIView):
+    permission_classes = [AllowAny]
     queryset = BlogPost.objects.all().order_by('created_at').prefetch_related('blog_vote')
     serializer_class = BlogPostSerializer
-    permission_classes = [AllowAny]
 
 
 # list community blog post for user
 class CommunityBlogPostListApiView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
     # listing all blogpost related to a community
     def get(self, request, *args, **kwargs):
@@ -372,6 +367,7 @@ class CommunityBlogPostListApiView(APIView):
 
 # blog post details
 class BlogPostDetailsApiView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
     lookup_field = 'slug'
@@ -395,3 +391,4 @@ class DisplayMembersCommunityApiView(APIView):
             'success': False,
             'message': 'No subreddit found yet',
         }, status=status.HTTP_404_NOT_FOUND)
+  

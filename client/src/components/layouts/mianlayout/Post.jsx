@@ -9,6 +9,8 @@ export default function Post({
   slug,
   communitySlug,
   timePosted,
+  commentsCount,
+  totalVote,
 }) {
   const handleShare = () => {
     if (navigator.share) {
@@ -35,7 +37,7 @@ export default function Post({
           <p className="title">{title}</p>
         </Link>
         <span className="__post-about">
-          {formatDistanceToNow(new Date(timePosted), { addSuffix: true })}
+          {formatDistanceToNow(new Date(timePosted), { addSuffix: true })} {""}
           by
           <p className="author ml-1">
             <Link>{author}</Link>
@@ -55,6 +57,7 @@ export default function Post({
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="cursor-pointer"
             >
               <path
                 d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"
@@ -63,7 +66,7 @@ export default function Post({
               />
             </svg>
 
-            <span className="number__">13k</span>
+            <span className="number__ text-center">{totalVote}</span>
 
             <svg
               width="20"
@@ -71,6 +74,7 @@ export default function Post({
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="cursor-pointer"
             >
               <path
                 d="M16.59 8.59L12 13.17L7.41 8.59L6 10L12 16L18 10L16.59 8.59Z"
@@ -95,7 +99,7 @@ export default function Post({
                 fill-opacity="0.38"
               />
             </svg>
-            <span className="number__">1281</span>
+            <span className="number__">{commentsCount}</span>
           </div>
 
           {/* share link */}

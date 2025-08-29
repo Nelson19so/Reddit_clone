@@ -2,8 +2,10 @@ import axios from "axios";
 import { refreshToken } from "./accounts/Authservice";
 import { data } from "react-router-dom";
 
+const entryUrl = "http://127.0.0.1:8000/api/";
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: entryUrl,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("access")}`,
   },
@@ -53,11 +55,16 @@ export default api;
 const communityDetails = async (slug) => {
   const access = localStorage.getItem("access");
 
-  if (!access) return null;
-
   try {
-    const response = await api.get(`community/community-details/${slug}/`);
-    return response.data;
+    if (access) {
+      const response = await api.get(`community/community-details/${slug}/`);
+      return response.data;
+    } else {
+      const response = await axios.get(
+        `${entryUrl}community/community-details/${slug}/`
+      );
+      return response.data;
+    }
   } catch (error) {
     return null;
   }
@@ -104,12 +111,8 @@ const BlogPostCreateApi = async (data, slug) => {
 
 // List all blogs for api's
 const ListBlogPostApi = async () => {
-  const access = localStorage.getItem("access");
-
-  if (!access) return [];
-
   try {
-    const response = await api.get("community/blogpost/");
+    const response = await axios.get(`${entryUrl}community/blogpost/`);
     return response.data;
   } catch (error) {
     return [];
@@ -118,12 +121,8 @@ const ListBlogPostApi = async () => {
 
 // list blog post for each communities communities
 const ListCommunityBlogPostApi = async (slug) => {
-  const access = localStorage.getItem("access");
-
-  if (!access) return [];
-
   try {
-    const response = await api.get(`community/${slug}/blogpost/`);
+    const response = await axios.get(`${entryUrl}community/${slug}/blogpost/`);
     return response.data;
   } catch (error) {
     return [];
@@ -132,12 +131,8 @@ const ListCommunityBlogPostApi = async (slug) => {
 
 // list blog post for each communities communities
 const BlogPostDetailsApi = async (slug) => {
-  const access = localStorage.getItem("access");
-
-  if (!access) return null;
-
   try {
-    const response = await api.get(`community/blogpost/${slug}/`);
+    const response = await axios.get(`${entryUrl}community/blogpost/${slug}/`);
     return {
       ok: true,
       data: response.data,
@@ -163,6 +158,7 @@ const leaveCommunityApi = async (slug) => {
       message: response.data,
     };
   } catch (error) {
+    console.log(error.response);
     return {
       ok: false,
       error: error.response?.data,
@@ -189,6 +185,34 @@ const joinCommunityApi = async (slug) => {
   }
 };
 
+// create new community api
+const createCommunityApi = async (formData) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return;
+
+  try {
+    const response = await api.post("community/create/", formData);
+    console.log("community data", response);
+
+    return {
+      data: {
+        ok: true,
+        message: response.data,
+      },
+    };
+  } catch (error) {
+    console.error("error creating community", error);
+
+    return {
+      data: {
+        ok: false,
+        error: error.response?.data,
+      },
+    };
+  }
+};
+
 export {
   BlogPostCreateApi,
   communityDetails,
@@ -198,4 +222,5 @@ export {
   BlogPostDetailsApi,
   leaveCommunityApi,
   joinCommunityApi,
+  createCommunityApi,
 };

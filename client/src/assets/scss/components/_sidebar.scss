@@ -30,6 +30,50 @@
     width: 100%;
     height: 100%;
 
+    .container-user-personals {
+      position: relative;
+
+      .active-user-drop-down {
+        height: 75px !important;
+        padding: 5px 0;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+        // border: 1px solid #e5e5e5;
+      }
+
+      .container-user-personals {
+        position: absolute;
+        background-color: #ffffff;
+        width: auto;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        transition: 0.3s;
+        animation: 0.3s ease-in-out;
+        height: 0;
+        overflow: hidden;
+
+        a {
+          font-size: 13px;
+          white-space: nowrap;
+          width: 100%;
+          padding: 5px 25px;
+
+          &:first-child {
+            color: #ff0000;
+          }
+
+          &:not(:first-child) {
+            border-top: 1px solid #e5e5e5;
+          }
+
+          &:hover {
+            background-color: #e5e5e5;
+          }
+        }
+      }
+    }
+
     .container-article {
       border-bottom: 1px solid #e5e5e5;
     }
@@ -55,6 +99,10 @@
             li {
               font-size: 14px;
               font-weight: 500;
+
+              .active-reddit {
+                color: #ff4500 !important;
+              }
 
               .active {
                 display: block;

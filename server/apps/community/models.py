@@ -8,7 +8,7 @@ User = get_user_model()
 
 # community model
 class Community(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, blank=False, null=False)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_communities')

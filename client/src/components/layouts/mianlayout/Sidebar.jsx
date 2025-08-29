@@ -11,6 +11,7 @@ export default function Sidebar({ displaySidebar }) {
   const [reddit, setReddit] = useState([]);
   const [user, setUser] = useState(null);
   const [loadingCommunity, setLoadingCommunity] = useState(false);
+  const [userDropDown, setUserDropDown] = useState(false);
 
   // handles location changes ...
   const location = useLocation();
@@ -20,6 +21,7 @@ export default function Sidebar({ displaySidebar }) {
   // Handles home page location
   useEffect(() => {
     setIsHomePage(location.pathname === "/");
+    setUserDropDown(false);
   }, [location]);
 
   // Handles the apis for fetching user data and community data
@@ -38,6 +40,10 @@ export default function Sidebar({ displaySidebar }) {
       });
   }, [access, location.pathname]);
 
+  function handleUserDropDown() {
+    setUserDropDown(!userDropDown);
+  }
+
   return (
     <div
       className={`container_sidebar w-[256px] ${
@@ -53,37 +59,51 @@ export default function Sidebar({ displaySidebar }) {
 
         <div className="container-article p-4">
           <div className="flex justify-between gap-5">
-            {user ? (
+            {loadingCommunity ? (
+              <p className="text-sm">loading</p>
+            ) : (
               <>
-                {user?.email ? (
+                {user?.email.length > 0 ? (
                   <>
                     <p className="text-[14px]">{user.email}</p>
-                    <button className="cursor-pointer">
-                      <svg
-                        width="24"
-                        height="25"
-                        viewBox="0 0 24 25"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                    <div className="container-user-personals">
+                      <button
+                        className="cursor-pointer"
+                        onClick={handleUserDropDown}
                       >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M7 10.2334H17L12 15.2334L7 10.2334Z"
-                          fill="black"
-                          fill-opacity="0.87"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          width="24"
+                          height="25"
+                          viewBox="0 0 24 25"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M7 10.2334H17L12 15.2334L7 10.2334Z"
+                            fill="black"
+                            fill-opacity="0.87"
+                          />
+                        </svg>
+                      </button>
+
+                      <div
+                        className={`container-user-personals ${
+                          userDropDown && "active-user-drop-down"
+                        }`}
+                      >
+                        <Link to="/delete-user">Delete account</Link>
+                        <Link to="/logout">Log out</Link>
+                      </div>
+                    </div>
                   </>
                 ) : (
-                  <p className="text-xs">Loading...</p>
+                  <Link className="cursor-pointer text-sm" to="/signup">
+                    Register
+                  </Link>
                 )}
               </>
-            ) : (
-              <Link className="cursor-pointer text-sm" to="/signup">
-                Register
-              </Link>
             )}
           </div>
         </div>
@@ -150,7 +170,10 @@ export default function Sidebar({ displaySidebar }) {
                 </li>
 
                 <li>
-                  <Link className="pl-4 pr-4 pt-2 pb-2 main-link">
+                  <Link
+                    to="/notification"
+                    className="pl-4 pr-4 pt-2 pb-2 main-link"
+                  >
                     <div className="flex justify-items-start gap-3">
                       <svg
                         width="24"
@@ -215,7 +238,11 @@ export default function Sidebar({ displaySidebar }) {
                             <li key={redd.id}>
                               <Link
                                 to={`/community/${redd.slug}/`}
-                                className="pl-9"
+                                className={`pl-9 ${
+                                  location.pathname ===
+                                    `/community/${redd.slug}/` &&
+                                  "active-reddit"
+                                }`}
                               >
                                 {redd.name}
                               </Link>

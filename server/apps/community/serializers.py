@@ -9,6 +9,7 @@ class RecursiveField(serializers.Serializer):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
+
 # Comment Serializer
 class CommentSerializer(serializers.Serializer):
     replies = RecursiveField(many=True, read_only=True)
@@ -22,25 +23,45 @@ class CommentSerializer(serializers.Serializer):
         comment = Comment.objects.create(**validated_data)
         return comment
 
-# blog post serializer create
+
+# community serializer create
 class CommunitySerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
+    name = serializers.CharField(required=True, error_messages={
+        'required': 'Name field is required',
+        'blank': 'Name field cannot be empty'
+    })
+    description = serializers.CharField(required=True, error_messages={
+        'required': 'Description field is required',
+        'blank': 'Description field cannot be empty'
+    })
 
     class Meta:
         model = Community
         fields = ['id', 'slug', 'name', 'description', 'created', 'owner', 'is_member']
-        read_only = ['id', 'slug', 'created']
+        read_only_fields = ['id', 'slug', 'owner', 'created']
 
     def get_is_member(self, obj):
         request = self.context.get('request')
         if request.user.is_authenticated:
             return obj.members.filter(id=request.user.id).exists()
         return False
+    
+    def validate_name(self, value):
+        if len(value) <= 4:
+            raise serializers.ValidationError('Community name is too short')
+        return value
+
+    def validate_description(self, value):
+        if len(value) <= 10:
+            raise serializers.ValidationError('Community description is too short (min 10 letters)')
+        return value
 
     def create(self, validated_data):
         request = self.context.get('request')
         validated_data['owner'] = request.user
         return Community.objects.create(**validated_data)
+
 
 # upvote and downvote serializer create
 class VoteSerializerCreate(serializers.ModelSerializer):
@@ -77,10 +98,25 @@ class BlogPostSerializer(serializers.ModelSerializer):
         slug_field='name',
         source='community'
     )
+    comments_count = serializers.SerializerMethodField()
+    total_votes = serializers.SerializerMethodField()
 
     class Meta:
         model = BlogPost
-        fields = ['id', 'title', 'slug', 'content', 'image', 'author', 'communities', 'created_at']
+        fields = [
+            'id', 'title', 'slug', 'content', 'image', 'author', 'communities', 'created_at',
+            'comments_count', 'total_votes'
+        ]
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
+    
+    def get_total_votes(self, obj):
+        blog_vote = getattr(obj, 'blog_vote', None)
+
+        if blog_vote:
+            return blog_vote.upvote.count() + blog_vote.downvote.count()
+        return 0
 
 
 # blog post create serializer

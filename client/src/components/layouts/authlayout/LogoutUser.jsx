@@ -5,7 +5,6 @@ export default function LogoutUser() {
   useEffect(() => {
     function logOutUser() {
       logout();
-      console.log("Logged out");
     }
     logOutUser();
   }, []);

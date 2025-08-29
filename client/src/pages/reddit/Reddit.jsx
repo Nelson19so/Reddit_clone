@@ -1,6 +1,5 @@
 import Masonry from "react-masonry-css";
 
-import UseAccessToken from "../../components/layouts/authlayout/UseAccessToken";
 import Post from "../../components/layouts/mianlayout/Post";
 import Layout from "../../components/layouts/Layout";
 
@@ -14,15 +13,11 @@ function Reddit() {
 
   document.title = "Reddit blog list";
 
-  const [access] = UseAccessToken();
-
   const location = useLocation();
 
   const { slug } = useParams();
 
   useEffect(() => {
-    if (!access) return;
-
     const fetchRedditPost = async () => {
       setLoadingPost(true);
 
@@ -41,12 +36,23 @@ function Reddit() {
       setBlogPost(response);
     };
 
-    if (location.pathname === `/community/${slug}/`) {
-      fetchCommunityReddit(slug);
-    } else {
-      fetchRedditPost();
-    }
-  }, [access, location.pathname, slug]);
+    if (location.pathname === `/community/${slug}/`) fetchCommunityReddit(slug);
+    if (location.pathname === "/") fetchRedditPost();
+  }, [location.pathname, slug]);
+
+  const capitalizeCommunitySlug = (str) => {
+    return str
+      .toLowerCase()
+      .split(/(\s+|-)/)
+      .map((part) => {
+        if (part.length > 0 && !/(\s+|-)/.test(part)) {
+          return part.charAt(0).toUpperCase() + part.slice(1);
+        }
+        return part;
+      })
+      .join(" ")
+      .replace("-", " ");
+  };
 
   const breakpointColumnsObj = {
     default: 3,
@@ -62,7 +68,11 @@ function Reddit() {
                     md:pr-[130px] pt-7 pb-7"
       >
         <h1 className="text-[20px] text-center">
-          Find something interesting to discuss
+          {location.pathname === "/" ? (
+            <>Find something interesting to discuss</>
+          ) : (
+            <>Explore the {capitalizeCommunitySlug(slug)} community</>
+          )}
         </h1>
         <div className="w-[100%] mt-10">
           {loadingPost ? (
@@ -87,6 +97,8 @@ function Reddit() {
                       communitySlug={post.communities[0]
                         ?.toLowerCase()
                         .replace(/ /g, "-")}
+                      commentsCount={post.comments_count}
+                      totalVote={post.total_votes}
                     />
                   ))}
                 </Masonry>
