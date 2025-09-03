@@ -142,7 +142,7 @@ class CommunityUpdateDelete(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-# join community  view
+# join community view
 class JoinCommunityViewCreate(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -211,32 +211,25 @@ class BlogPostVoteApiView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, slug, *args, **kwargs):
-        try:
+        post = generics.get_object_or_404(BlogPost, slug=slug)
+        user = request.user
 
-            post = generics.get_object_or_404(BlogPost, slug=slug)
-            user = request.user
+        serializer = self.get_serializer(
+            data=request.data,
+            context={
+                'post': post, 'user': user,
+                'request': request, 'slug': slug
+            }
+        )
 
-            serializer = self.get_serializer(
-                data=request.data,
-                context={
-                    'post': post, 'user': user,
-                    'request': request,
-                }
-            )
+        serializer.is_valid(raise_exception=True)
+        vote = serializer.save()
 
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            return Response({
-                'success': True,
-                'message': 'You have successfully vote'
-            }, status=status.HTTP_200_OK)
-
-        except BlogPost.DoesNotExist:
-            return Response({
-                'success': False,
-                'message': 'No Blogpost was found'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'success': True,
+            'message': f'You have successfully voted',
+            # 'total_vote': vote.upvote.count(),
+        }, status=status.HTTP_200_OK)
 
 
 # blog post api view create

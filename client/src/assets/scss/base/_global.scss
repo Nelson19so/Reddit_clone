@@ -3,6 +3,7 @@ html {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   width: 100vw;
+  height: 100vh;
   margin: 0;
   overflow-x: hidden;
   background-color: #f6f6f6;
@@ -24,6 +25,7 @@ html {
 
   .container-main-page__ {
     width: 100vw;
+    height: 100%;
 
     @media only screen and (min-width: 1061px) {
       width: calc(100vw - 256px);

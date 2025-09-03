@@ -5,6 +5,8 @@ import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
 import Comment from "../../components/layouts/comment";
+import UseVote from "../../components/common/UseVote";
+import Message from "../../components/layouts/mianlayout/Message";
 
 function BlogpostDetails() {
   const [blogPost, setBlogPost] = useState(null);
@@ -27,8 +29,17 @@ function BlogpostDetails() {
     BlogPostApi(slug);
   }, [slug, location.pathname]);
 
+  const { handleBlogPostVote, success } = UseVote();
+
+  const handleBlogPost = async (voteType) => {
+    const data = await handleBlogPostVote(slug, voteType);
+  };
+
   return (
     <Layout>
+      {success && (
+        <Message success={success} showError={false} showSuccess={true} />
+      )}
       <div className="container-articles border-b border-gray-300 md:pl-[130px] pl-[10px] pr-[10px] md:pr-[130px] pt-7 pb-7">
         <div className="title flex justify-start gap-[30px]">
           <div className="container-vote">
@@ -41,6 +52,7 @@ function BlogpostDetails() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="cursor-pointer"
+                onClick={() => handleBlogPost("upvote")}
               >
                 <path
                   d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z"
@@ -60,6 +72,7 @@ function BlogpostDetails() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="cursor-pointer"
+                onClick={() => handleBlogPost("downvote")}
               >
                 <path
                   d="M16.59 8.59L12 13.17L7.41 8.59L6 10L12 16L18 10L16.59 8.59Z"

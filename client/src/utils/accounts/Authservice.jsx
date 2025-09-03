@@ -1,12 +1,12 @@
 import axios from "axios";
 import api from "../Api";
 
-const API_URL = "http://127.0.0.1:8000/api/accounts/";
+const API_URL = `${import.meta.env.VITE_API_URL}accounts/`;
 
 // register user account api
 export const CreateAccount = async (formData) => {
   try {
-    const response = await api.post("accounts/register/", formData);
+    const response = await axios.post(`${API_URL}accounts/register/`, formData);
 
     const { token } = response.data;
 

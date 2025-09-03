@@ -1,4 +1,4 @@
-import { data, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../../assets/images/reddit-1.png";
 import { useEffect, useState } from "react";
@@ -93,8 +93,8 @@ export default function Sidebar({ displaySidebar }) {
                           userDropDown && "active-user-drop-down"
                         }`}
                       >
-                        <Link to="/delete-user">Delete account</Link>
                         <Link to="/logout">Log out</Link>
+                        <Link to="/delete-user">Delete account</Link>
                       </div>
                     </div>
                   </>
@@ -231,25 +231,24 @@ export default function Sidebar({ displaySidebar }) {
                   <ul className="mt-3 flex justify-items-start gap-3 flex-col">
                     {loadingCommunity ? (
                       <p className="text-sm">loading...</p>
+                    ) : Array.isArray(reddit) && reddit.length > 0 ? (
+                      <>
+                        {reddit.map((redd) => (
+                          <li key={redd.id}>
+                            <Link
+                              to={`/community/${redd.slug}/`}
+                              className={`pl-9 ${
+                                location.pathname ===
+                                  `/community/${redd.slug}/` && "active-reddit"
+                              }`}
+                            >
+                              {redd.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </>
                     ) : (
-                      reddit.length > 0 && (
-                        <>
-                          {reddit.map((redd) => (
-                            <li key={redd.id}>
-                              <Link
-                                to={`/community/${redd.slug}/`}
-                                className={`pl-9 ${
-                                  location.pathname ===
-                                    `/community/${redd.slug}/` &&
-                                  "active-reddit"
-                                }`}
-                              >
-                                {redd.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </>
-                      )
+                      <li className="pl-9">No subreddit yet</li>
                     )}
                   </ul>
                 </li>

@@ -11,7 +11,9 @@ class Community(models.Model):
     name = models.CharField(max_length=100, unique=True, blank=False, null=False)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_communities')
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_communities'
+    )
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='joined_communities')
     created = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -77,40 +79,37 @@ class BlogPost(models.Model):
 
 # Blog post vote model
 class BlogPostVote(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_vote'
+    post = models.OneToOneField(
+        BlogPost, on_delete=models.CASCADE, related_name='blog_vote'
     )
-    post = models.OneToOneField(BlogPost, on_delete=models.CASCADE, related_name='blog_vote')
     category = models.ForeignKey(
-        BlogPostCategory, on_delete=models.PROTECT, 
+        BlogPostCategory, on_delete=models.PROTECT,
         related_name='blog_category', null=True, blank=True
     )
-    upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='upvote_posts')
-    downvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='downvote_posts')
-    upvote_count = models.IntegerField()
-    downvote_count = models.IntegerField()
+    upvote = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='upvote_posts',
+        blank=True, null=True
+    )
+    downvote = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='downvote_posts',
+        blank=True, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.post.title
 
-    class Meta:
-        unique_together = ('post', 'user')
-
-    @property
-    def blog_post_upvote_count(self):
-        return self.upvote.all if self.upvote else None
-
-    @property
-    def blog_post_downvote_count(self):
-        return self.downvote.all if self.downvote else None
 
 # blog post comment model
 class Comment(models.Model):
     post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments'
+    )
     content = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

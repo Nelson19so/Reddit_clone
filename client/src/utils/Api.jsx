@@ -1,8 +1,9 @@
 import axios from "axios";
 import { refreshToken } from "./accounts/Authservice";
-import { data } from "react-router-dom";
 
-const entryUrl = "http://127.0.0.1:8000/api/";
+// const base_Url = import.meta.env.VITE_API_URL;
+
+const entryUrl = `${import.meta.env.VITE_API_URL}community/`;
 
 const api = axios.create({
   baseURL: entryUrl,
@@ -57,12 +58,10 @@ const communityDetails = async (slug) => {
 
   try {
     if (access) {
-      const response = await api.get(`community/community-details/${slug}/`);
+      const response = await api.get(`community-details/${slug}/`);
       return response.data;
     } else {
-      const response = await axios.get(
-        `${entryUrl}community/community-details/${slug}/`
-      );
+      const response = await axios.get(`${entryUrl}community-details/${slug}/`);
       return response.data;
     }
   } catch (error) {
@@ -77,7 +76,7 @@ const communityMembers = async () => {
   if (!access) return null;
 
   try {
-    const response = await api.get("community/community-user/");
+    const response = await api.get("community-user/");
     return response.data;
   } catch (error) {
     return [];
@@ -91,7 +90,7 @@ const BlogPostCreateApi = async (data, slug) => {
   if (!access) return null;
 
   try {
-    const response = await api.post(`community/blogpost/create/${slug}/`, data);
+    const response = await api.post(`blogpost/create/${slug}/`, data);
 
     return {
       data: {
@@ -112,7 +111,7 @@ const BlogPostCreateApi = async (data, slug) => {
 // List all blogs for api's
 const ListBlogPostApi = async () => {
   try {
-    const response = await axios.get(`${entryUrl}community/blogpost/`);
+    const response = await axios.get(`${entryUrl}blogpost/`);
     return response.data;
   } catch (error) {
     return [];
@@ -122,7 +121,7 @@ const ListBlogPostApi = async () => {
 // list blog post for each communities communities
 const ListCommunityBlogPostApi = async (slug) => {
   try {
-    const response = await axios.get(`${entryUrl}community/${slug}/blogpost/`);
+    const response = await axios.get(`${entryUrl}${slug}/blogpost/`);
     return response.data;
   } catch (error) {
     return [];
@@ -132,7 +131,7 @@ const ListCommunityBlogPostApi = async (slug) => {
 // list blog post for each communities communities
 const BlogPostDetailsApi = async (slug) => {
   try {
-    const response = await axios.get(`${entryUrl}community/blogpost/${slug}/`);
+    const response = await axios.get(`${entryUrl}blogpost/${slug}/`);
     return {
       ok: true,
       data: response.data,
@@ -152,7 +151,7 @@ const leaveCommunityApi = async (slug) => {
   if (!access) return null;
 
   try {
-    const response = await api.post(`community/leave-community/${slug}/`);
+    const response = await api.post(`leave-community/${slug}/`);
     return {
       ok: true,
       message: response.data,
@@ -166,13 +165,14 @@ const leaveCommunityApi = async (slug) => {
   }
 };
 
+// join community api create
 const joinCommunityApi = async (slug) => {
   const access = localStorage.getItem("access");
 
   if (!access) return null;
 
   try {
-    const response = await api.post(`community/join-community/${slug}/`);
+    const response = await api.post(`join-community/${slug}/`);
     return {
       ok: true,
       message: response.data,
@@ -192,7 +192,7 @@ const createCommunityApi = async (formData) => {
   if (!access) return;
 
   try {
-    const response = await api.post("community/create/", formData);
+    const response = await api.post("create/", formData);
     console.log("community data", response);
 
     return {
@@ -213,6 +213,35 @@ const createCommunityApi = async (formData) => {
   }
 };
 
+// blog post vote api create
+const blogPostVoteApiCreate = async (slug, voteType) => {
+  const access = localStorage.getItem("access");
+
+  if (!access) return;
+
+  try {
+    const response = await api.post(`blogpost/vote/${slug}/`, {
+      upvote: voteType === "upvote",
+      downvote: voteType === "downvote",
+    });
+    console.log("vote response", response.data);
+    return {
+      data: {
+        ok: true,
+        message: response.data,
+      },
+    };
+  } catch (error) {
+    console.error("error response", error.response);
+    return {
+      data: {
+        ok: false,
+        error: error.response,
+      },
+    };
+  }
+};
+
 export {
   BlogPostCreateApi,
   communityDetails,
@@ -223,4 +252,5 @@ export {
   leaveCommunityApi,
   joinCommunityApi,
   createCommunityApi,
+  blogPostVoteApiCreate,
 };

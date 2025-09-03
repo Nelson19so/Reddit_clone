@@ -64,8 +64,8 @@ function Reddit() {
   return (
     <Layout>
       <div
-        className="__reddit-container-main md:pl-[130px] pl-[10px] pr-[10px] 
-                    md:pr-[130px] pt-7 pb-7"
+        className="__reddit-container-main h-[100%] md:pl-[130px] pl-[10px] pr-[10px] 
+                  md:pr-[130px] pt-7 pb-7 md:pb-15"
       >
         <h1 className="text-[20px] text-center">
           {location.pathname === "/" ? (
@@ -79,7 +79,7 @@ function Reddit() {
             <p className="text-center mt-40">loading...</p>
           ) : (
             <>
-              {blogPost.length > 0 && (
+              {Array.isArray(blogPost) && blogPost.length > 0 ? (
                 <Masonry
                   breakpointCols={breakpointColumnsObj}
                   className="flex md:gap-6 gap-4"
@@ -102,6 +102,8 @@ function Reddit() {
                     />
                   ))}
                 </Masonry>
+              ) : (
+                <p className="text-center mt-40">No Subreddit was found yet</p>
               )}
             </>
           )}
