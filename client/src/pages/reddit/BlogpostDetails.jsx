@@ -4,13 +4,11 @@ import { BlogPostDetailsApi } from "../../utils/Api";
 import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
-<<<<<<< HEAD
+
 import Comment from "../../components/layouts/comment";
 import UseVote from "../../components/common/UseVote";
 import Message from "../../components/layouts/mianlayout/Message";
-=======
 import Comment from "../../components/layouts/Comment";
->>>>>>> 9997b2a44c912695926dc92d48af2d44ddecfd62
 
 function BlogpostDetails() {
   const [blogPost, setBlogPost] = useState(null);
