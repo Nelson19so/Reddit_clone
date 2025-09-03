@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { BlogPostDetailsApi } from "../../utils/Api";
 import { formatDistanceToNow } from "date-fns";
 
-import Layout from "../../components/layouts/Layout";
-import Comment from "../../components/layouts/Comment";
 import UseVote from "../../components/common/UseVote";
 import Message from "../../components/layouts/mianlayout/Message";
+import Comment from "../../components/layouts/Comment";
+import Layout from "../../components/layouts/Layout";
 
 function BlogpostDetails() {
   const [blogPost, setBlogPost] = useState(null);
