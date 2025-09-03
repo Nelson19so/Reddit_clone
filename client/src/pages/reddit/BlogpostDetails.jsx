@@ -4,7 +4,7 @@ import { BlogPostDetailsApi } from "../../utils/Api";
 import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
-import Comment from "../../components/layouts/comment";
+import Comment from "../../components/layouts/Comment";
 
 function BlogpostDetails() {
   const [blogPost, setBlogPost] = useState(null);
