@@ -74,6 +74,7 @@ function Reddit() {
             <>Explore the {capitalizeCommunitySlug(slug)} community</>
           )}
         </h1>
+
         <div className="w-[100%] mt-10">
           {loadingPost ? (
             <p className="text-center mt-40">loading...</p>
