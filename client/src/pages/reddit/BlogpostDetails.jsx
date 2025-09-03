@@ -4,7 +4,6 @@ import { BlogPostDetailsApi } from "../../utils/Api";
 import { formatDistanceToNow } from "date-fns";
 
 import Layout from "../../components/layouts/Layout";
-
 import Comment from "../../components/layouts/comment";
 import UseVote from "../../components/common/UseVote";
 import Message from "../../components/layouts/mianlayout/Message";
