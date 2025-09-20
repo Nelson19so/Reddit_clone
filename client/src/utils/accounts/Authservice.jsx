@@ -6,7 +6,7 @@ const API_URL = `${import.meta.env.VITE_API_URL}accounts/`;
 // register user account api
 export const CreateAccount = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}accounts/register/`, formData);
+    const response = await axios.post(`${API_URL}register/`, formData);
 
     const { token } = response.data;
 
@@ -34,10 +34,7 @@ export const CreateAccount = async (formData) => {
 // login user api
 export const LoginUser = async (formData) => {
   try {
-    const response = await axios.post(
-      "http://127.0.0.1:8000/api/accounts/login/",
-      formData
-    );
+    const response = await axios.post(`${API_URL}login/`, formData);
 
     const { token } = response.data;
 

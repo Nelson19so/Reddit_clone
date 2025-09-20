@@ -1,15 +1,27 @@
-export default function Message({ error, success, showError, showSuccess }) {
+export default function Message({ error, success }) {
   return (
-    <div>
+    <div className="message-container__">
       <div
         className={`__msg ${
-          showError ? "container-error-msg" : "container-success-msg"
+          error ? "container-error-msg" : "container-success-msg"
         }`}
       >
-        {/* {showError ? <span>{error}</span> : <span>{success}</span>} */}
-        {showError && <span>{error}</span>}
-        {showSuccess && <span>{success}</span>}
+        {/* {error ? <span>{error}</span> : <span>{success}</span>} */}
+        {error && <span>{error}</span>}
+        {success && <span>{success}</span>}
       </div>
     </div>
+
+    // <div className="message-container__">
+    //   <div className="__msg container-error-msg">
+    //     <span>Error displaying Error displaying</span>
+    //   </div>
+    //   <div className="__msg container-error-msg">
+    //     <span>Error displaying Error displaying</span>
+    //   </div>
+    //   <div className="__msg container-error-msg">
+    //     <span>Error displaying Error displaying</span>
+    //   </div>
+    // </div>
   );
 }

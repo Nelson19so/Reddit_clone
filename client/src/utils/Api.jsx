@@ -1,8 +1,6 @@
 import axios from "axios";
 import { refreshToken } from "./accounts/Authservice";
 
-// const base_Url = import.meta.env.VITE_API_URL;
-
 const entryUrl = `${import.meta.env.VITE_API_URL}community/`;
 
 const api = axios.create({

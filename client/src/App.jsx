@@ -68,4 +68,72 @@ function App() {
   return <></>;
 }
 
+<div className="container_auth">
+  <div className="frame">
+    <div className="nav">
+      <ul className="links">
+        <li>
+          <Link to="/login" className="btn">
+            Sign in
+          </Link>
+        </li>
+        <li className="signup-active">
+          <Link to="/signup" className="btn">
+            Sign up
+          </Link>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <form
+        className="form-signup"
+        onSubmit={handleSubmit}
+        method="post"
+        name="form"
+      >
+        {/* <label for="fullname">Full name</label> */}
+        {/* <input
+                className="form-styling"
+                type="text"
+                name="fullname"
+                placeholder=""
+              /> */}
+        <label for="email">Email</label>
+        <input
+          className="form-styling"
+          type="text"
+          name="email"
+          placeholder=""
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <label for="password">Password</label>
+        <input
+          className="form-styling"
+          type="text"
+          name="password"
+          placeholder=""
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <label for="confirmpassword">Confirm password</label>
+        <input
+          className="form-styling"
+          type="text"
+          name="confirmpassword"
+          placeholder=""
+          value={formData.confirmpassword}
+          onChange={handleChange}
+        />
+
+        <button className="btn-signup">Sign Up</button>
+      </form>
+    </div>
+
+    <div className="forgot">
+      <a href="#">Forgot your password?</a>
+    </div>
+  </div>
+</div>;
+
 export default App;

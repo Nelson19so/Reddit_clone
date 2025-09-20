@@ -1,28 +1,43 @@
-.__msg {
-  padding: 10px 25px;
-  width: fit-content;
+.message-container__ {
   position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  justify-content: flex-start;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
   z-index: 99999;
-  right: 12px;
-  top: 12px;
-  border-radius: 5px;
-  animation: 1s ease-in-out;
-  transition: 1s;
+  height: auto;
+  overflow: hidden;
 
-  span {
-    color: #fff;
-    font-size: 16px;
+  .__msg {
+    padding: 10px 25px;
+    width: 372px;
+    text-align: center;
+    border-radius: 20px;
+    animation: 1s ease-in-out;
+    transition: 1s;
+
+    span {
+      color: #fff;
+      font-size: 14px;
+    }
   }
 }
 
 .container-error-msg {
   background-color: #ff3737;
   border-bottom: 5px solid #8b0a0a;
+  // top: 12px !important;
 }
 
 .container-success-msg {
   background-color: #32cd32;
   border-bottom: 5px solid #008000;
+  // top: 12px !important;
 }
 
 .active-container-about-community {
