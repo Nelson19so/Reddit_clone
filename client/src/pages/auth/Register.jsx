@@ -74,8 +74,10 @@ function Register() {
 
   return (
     <>
-      {success && <Message success={success} />}
-      {renderErrors()}
+      <div className="message-container__">
+        {success && <Message success={success} />}
+        {renderErrors()}
+      </div>
       <div className="container-auth-page_ w-[100vw] h-[100vh]">
         <div
           className="container-auth-page-padding_ h-[100%] w-[100%] flex justify-center"
@@ -145,7 +147,11 @@ function Register() {
                 </Link>
               </div>
 
-              <form onSubmit={handleSubmit} className="mt-10">
+              <div className="container_divider mt-8">
+                <span>OR</span>
+              </div>
+
+              <form onSubmit={handleSubmit} className="mt-5">
                 <div className="container-input-control">
                   <label htmlFor="email">Email Address</label>
                   <input

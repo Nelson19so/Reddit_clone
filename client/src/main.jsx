@@ -1,8 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 // import App from "./App.jsx";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Reddit from "./pages/reddit/Reddit.jsx";
 import BlogpostDetails from "./pages/reddit/BlogpostDetails.jsx";
@@ -13,30 +15,35 @@ import PageNoteFound from "./pages/PageNoteFound.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Reddit />} />
+    <GoogleOAuthProvider clientId={import.meta.env.CLIENT_ID}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Reddit />} />
 
-        <Route path="/blogpost_details/:slug/" element={<BlogpostDetails />} />
+          <Route
+            path="/blogpost_details/:slug/"
+            element={<BlogpostDetails />}
+          />
 
-        <Route path="/community/:slug/" element={<Reddit />} />
+          <Route path="/community/:slug/" element={<Reddit />} />
 
-        {/* authentication route */}
-        <Route path="/login" element={<Login />} />
+          {/* authentication route */}
+          <Route path="/login" element={<Login />} />
 
-        <Route path="/signup" element={<Register />} />
+          <Route path="/signup" element={<Register />} />
 
-        <Route
-          path="/logout"
-          element={
-            <ProtectedRoute>
-              <LogoutUser />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/logout"
+            element={
+              <ProtectedRoute>
+                <LogoutUser />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="*" element={<PageNoteFound />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<PageNoteFound />} />
+        </Routes>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

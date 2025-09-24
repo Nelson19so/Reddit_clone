@@ -11,19 +11,45 @@ from django.contrib.auth     import get_user_model
 from rest_framework_simplejwt.tokens     import RefreshToken, AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views      import TokenRefreshView
+from google.oauth2 import id_token
+from google.auth.transport import requests
+# from dj_rest_auth.registration.views import SocialLoginView
+# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 
 
 # defining the user
 User = get_user_model()
 
 
-# user mail view page view
-class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+# Google auth for users
+class GoogleAuthView(APIView):
+    def post(self, request):
+        token = request.data.get("token")
 
-    def get(self, request):
-        serializer = UserProfileSerializer(request.user)
-        return Response(serializer.data)
+        try:
+            
+            # Verify token with Google
+            idinfo = id_token.verify_oauth2_token(token, requests.Request())
+
+            email = idinfo["email"]
+            name = idinfo.get("name", email.split("@")[0])
+
+            # Get or create user
+            user, created = User.objects.get_or_create(
+                email=email,
+                defaults={"username": name},
+            )
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            })
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 '''''
@@ -124,6 +150,7 @@ class LogOutUserView(APIView):
     # handles the logic for black listing/logging out user
     def post(self, request):
         try:
+
             refresh_token = request.data.get['refresh']
             token = RefreshToken(refresh_token)
             # prevent re use
@@ -132,11 +159,13 @@ class LogOutUserView(APIView):
                 'success': True,
                 'message': 'Logged out successfully'
             }, status=status.HTTP_205_RESET_CONTENT)
+
         except TokenError:
             return Response({
                 'success': False,
                 'message': 'Invalid token'
             }, status=status.HTTP_400_BAD_REQUEST)
+            
         except KeyError:
             return Response({
                 'success': False,

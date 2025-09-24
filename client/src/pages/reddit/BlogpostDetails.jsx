@@ -37,9 +37,11 @@ function BlogpostDetails() {
 
   return (
     <Layout>
-      {success && (
-        <Message success={success} showError={false} showSuccess={true} />
-      )}
+      <div className="message-container__">
+        {success && (
+          <Message success={success} showError={false} showSuccess={true} />
+        )}
+      </div>
       <div className="container-articles border-b border-gray-300 md:pl-[130px] pl-[10px] pr-[10px] md:pr-[130px] pt-7 pb-7">
         <div className="title flex justify-start gap-[30px]">
           <div className="container-vote">

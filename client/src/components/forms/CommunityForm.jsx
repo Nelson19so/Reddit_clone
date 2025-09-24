@@ -72,10 +72,12 @@ export default function CommunityForm({
 
   return (
     <>
-      {success && (
-        <Message showSuccess={true} showError={false} success={success} />
-      )}
-      {error && <>{renderErrors()}</>}
+      <div className="message-container__">
+        {success && (
+          <Message showSuccess={true} showError={false} success={success} />
+        )}
+        {error && <>{renderErrors()}</>}
+      </div>
       <div className={`overall-container ${communityForm && "active-form"}`}>
         <div className="container-blogpost-form bg-white ">
           <div className="container-blogpost-form-wrapper w-[100%]">

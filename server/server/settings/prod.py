@@ -5,7 +5,7 @@ load_dotenv()
 
 # CORSE ALLOWED ORIGIN for production mode
 CORS_ALLOWED_ORIGINS = [
-    "*",
+    "reddit-clone-sand-phi.vercel.app",
 ]
 
 # ALLOWED HOST for production mode

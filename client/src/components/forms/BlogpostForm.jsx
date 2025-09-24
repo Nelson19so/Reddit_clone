@@ -110,10 +110,12 @@ export default function BlogpostForm({ _handleCommunityBlogForm, blogForm }) {
 
   return (
     <>
-      {successMsg && (
-        <Message showSuccess={true} showError={false} success={successMsg} />
-      )}
-      {errorMsg && <>{renderErrors()}</>}
+      <div className="message-container__">
+        {successMsg && (
+          <Message showSuccess={true} showError={false} success={successMsg} />
+        )}
+        {errorMsg && <>{renderErrors()}</>}
+      </div>
       <div className={`overall-container ${blogForm && "active-form"}`}>
         <div className="container-blogpost-form bg-white ">
           <div className="container-blogpost-form-wrapper w-[100%]">

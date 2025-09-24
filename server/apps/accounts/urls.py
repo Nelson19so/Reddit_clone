@@ -3,7 +3,7 @@ from .views import (
     UserProfileView, UserRegistrationViewCreate,
     UserLoginViewCreate, LogOutUserView, 
     UserDeleteViewCreate, UserTokenVerifyView,
-    CustomTokenRefreshView,
+    CustomTokenRefreshView, GoogleAuthView,
 ) 
 
 # api url configuration
@@ -15,4 +15,5 @@ urlpatterns = [
     path('delete-account/', UserDeleteViewCreate.as_view(), name='delete_user_account'),
     path('token/verify/', UserTokenVerifyView.as_view(), name='token_verify'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    path('google/login/', GoogleAuthView.as_view(), name='google-login'),
 ]

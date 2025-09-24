@@ -10,7 +10,7 @@ export const CreateAccount = async (formData) => {
 
     const { token } = response.data;
 
-    // saves the token to the localstorage
+    // saves the JWT token to the localstorage
     localStorage.setItem("access", token.access);
     localStorage.setItem("refresh", token.refresh);
 
@@ -38,7 +38,7 @@ export const LoginUser = async (formData) => {
 
     const { token } = response.data;
 
-    // Save tokens to localStorage
+    // Save JWT tokens to localStorage
     localStorage.setItem("access", token.access);
     localStorage.setItem("refresh", token.refresh);
 
@@ -85,14 +85,40 @@ export const userProfile = async () => {
   }
 };
 
-// logout user api
+// Logout user api
 export const logout = () => {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   window.location.href = "/login";
 };
 
+// Check if user is authenticated or not
 export const isAuthenticated = () => {
   const token = localStorage.getItem("access");
   return !!token;
+};
+
+// Google authentication api
+export const handleGoogleAuthApi = async (credentialResponse) => {
+  try {
+    const token = credentialResponse.credential;
+    const response = axios.post(`${API_URL}/google/login/`, { token: token });
+
+    // saves JWT token for user
+    localStorage.setItem("access", response.data.access);
+    localStorage.setItem("refresh", response.data.refresh);
+
+    return {
+      ok: true,
+      message: "User created successfully",
+    };
+  } catch (error) {
+    console.error(error.response.data);
+    return {
+      data: {
+        ok: false,
+        error: error.response?.data || "Registration failed. Try again later.",
+      },
+    };
+  }
 };

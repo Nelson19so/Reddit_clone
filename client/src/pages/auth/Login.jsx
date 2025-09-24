@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { LoginUser, isAuthenticated } from "../../utils/accounts/Authservice";
 import Message from "../../components/layouts/mianlayout/Message";
+import { GoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -56,23 +57,25 @@ function Login() {
     }
   };
 
-  // const renderErrors = () => {
-  //   return (
-  //     error &&
-  //     Object.entries(error).map(([field, messages], i) => {
-  //       const messageText = Array.isArray(messages)
-  //         ? messages.join(", ")
-  //         : String(messages);
-
-  //       return <Message key={i} error={`${messageText}`} />;
-  //     })
-  //   );
-  // };
-
   return (
     <>
-      {success && <Message showSuccess={true} success={success} />}
-      {Array.isArray(error) && error && <Message error={error} />}
+      <div className="message-container__">
+        {/* // Success message */}
+        {success && <Message success={success} />}
+
+        {/* // Multiple errors stacked */}
+        {Array.isArray(error) &&
+          error.map((err, i) => <Message key={i} error={err} />)}
+        {error &&
+          typeof error === "object" &&
+          Object.entries(error).map(([field, messages], i) => {
+            const messageText = Array.isArray(messages)
+              ? messages.join(", ")
+              : String(messages);
+            return <Message key={i} error={messageText} />;
+          })}
+      </div>
+
       {/* {renderErrors()} */}
       <div className="container-auth-page_ w-[100vw] h-[100vh]">
         <div
@@ -101,10 +104,9 @@ function Login() {
 
             <div className="container-form mt-4">
               <div className="container-google-option mt-10">
-                <Link>
-                  <div className="container-google-option-holder bg-white flex justify-center gap-3">
-                    <div className="container_google_svg">
-                      {/* <svg
+                <div className="container-google-option-holder bg-white flex justify-center gap-3">
+                  <div className="container_google_svg">
+                    {/* <svg
                         width="20"
                         height="20"
                         viewBox="0 0 20 20"
@@ -138,10 +140,13 @@ function Login() {
                           />
                         </defs>
                       </svg> */}
-                    </div>
-                    <span>Continue with google</span>
                   </div>
-                </Link>
+                  <span>Continue with google</span>
+                </div>
+              </div>
+
+              <div className="container_divider mt-8">
+                <span>OR</span>
               </div>
 
               <form onSubmit={handleSubmit} className="mt-10">
