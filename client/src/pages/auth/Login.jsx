@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { LoginUser, isAuthenticated } from "../../utils/accounts/Authservice";
+import {
+  LoginUser,
+  handleGoogleAuthApi,
+  isAuthenticated,
+} from "../../utils/accounts/Authservice";
 import Message from "../../components/layouts/mianlayout/Message";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -27,6 +32,26 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const { access_token } = tokenResponse;
+
+        const response = axios.post(`${API_URL}/google/login/`, {
+          token: access_token,
+        });
+
+        // saves JWT token for user
+        localStorage.setItem("access", response.data.access);
+        localStorage.setItem("refresh", response.data.refresh);
+
+        setSuccess("Login successful");
+      } catch (error) {
+        setError("Login failed");
+      }
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +129,10 @@ function Login() {
 
             <div className="container-form mt-4">
               <div className="container-google-option mt-10">
-                <div className="container-google-option-holder bg-white flex justify-center gap-3">
+                <div
+                  className="container-google-option-holder bg-white flex justify-center gap-3"
+                  onClick={() => login()}
+                >
                   <div className="container_google_svg">
                     {/* <svg
                         width="20"
