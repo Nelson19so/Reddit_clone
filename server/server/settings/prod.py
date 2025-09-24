@@ -5,7 +5,7 @@ load_dotenv()
 
 # CORSE ALLOWED ORIGIN for production mode
 CORS_ALLOWED_ORIGINS = [
-    "reddit-clone-sand-phi.vercel.app",
+    "https://reddit-clone-sand-phi.vercel.app",
 ]
 
 # ALLOWED HOST for production mode
@@ -40,9 +40,5 @@ DATABASES = {
 # DEBUG is set to false for production mode
 DEBUG = False
 
-# CORS ALLOW ORIGINS which is set to false for prod
-CORS_ALLOW_ALL_ORIGINS = DEBUG
-
-# This only applies in production mode (DEBUG=False)
 # if not DEBUG:
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
