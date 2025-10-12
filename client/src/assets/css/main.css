@@ -680,6 +680,7 @@ form textarea {
 }
 .container-auth-page_ .container-items-auth .auth-error {
   color: #ff3737;
+  background-color: white;
   padding: 2px 4px;
   width: 100%;
   display: block;
