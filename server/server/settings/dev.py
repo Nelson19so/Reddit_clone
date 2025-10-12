@@ -2,7 +2,7 @@ from .base import *
 
 # CORSE ALLOWED ORIGIN for development mode
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:5173",
+    "http://localhost:5173",
 ]
 
 # ALLOWED HOST for development mode

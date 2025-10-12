@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   isAuthenticated,
@@ -6,6 +6,7 @@ import {
 } from "../../utils/accounts/Authservice";
 
 import Message from "../../components/layouts/mianlayout/Message";
+import UseGoogleAuth from "../../utils/hooks/UseGoogleAuth";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ function Register() {
       setSuccess(response.message);
       setTimeout(() => {
         setSuccess(null);
-      }, 5000);
+      }, 10000);
 
       setFormData({
         email: "",
@@ -59,25 +60,33 @@ function Register() {
     }
   };
 
-  const renderErrors = () => {
-    return (
-      error &&
-      Object.entries(error).map(([field, messages], i) => {
-        const messageText = Array.isArray(messages)
-          ? messages.join(", ")
-          : String(messages);
+  // Handles Google authentication
+  const googleAuth = UseGoogleAuth(
+    () => {
+      setSuccess("Google authentication successful!");
+      setTimeout(() => setSuccess(null), 5000);
+    },
+    () => {
+      setError("Google authentication failed. Try again!");
+      setTimeout(() => setError(null), 5000);
+    }
+  );
 
-        return <Message key={i} error={`${messageText}`} />;
-      })
-    );
+  const getFieldError = (fieldName) => {
+    if (error[fieldName]) {
+      return Array.isArray(error[fieldName])
+        ? error[fieldName][0]
+        : error[fieldName];
+    }
+    return "";
   };
 
   return (
     <>
       <div className="message-container__">
         {success && <Message success={success} />}
-        {renderErrors()}
       </div>
+
       <div className="container-auth-page_ w-[100vw] h-[100vh]">
         <div
           className="container-auth-page-padding_ h-[100%] w-[100%] flex justify-center"
@@ -105,7 +114,10 @@ function Register() {
             <div className="container-form mt-4">
               <div className="container-google-option mt-10">
                 <Link>
-                  <div className="container-google-option-holder bg-white flex justify-center gap-3">
+                  <div
+                    className="container-google-option-holder bg-white flex justify-center gap-3"
+                    onClick={() => googleAuth()}
+                  >
                     <div className="container_google_svg">
                       {/* <svg
                         width="20"
@@ -147,7 +159,7 @@ function Register() {
                 </Link>
               </div>
 
-              <div className="container_divider mt-8">
+              <div className="container_divider mt-10">
                 <span>OR</span>
               </div>
 
@@ -162,6 +174,12 @@ function Register() {
                     value={formData.email}
                     onChange={handleChange}
                   />
+
+                  {getFieldError("email") && (
+                    <span className="mt-3 text-red-400 text-sm auth-error">
+                      {getFieldError("email")}
+                    </span>
+                  )}
                 </div>
 
                 <div className="container-input-control mt-7">
@@ -174,6 +192,11 @@ function Register() {
                     value={formData.password}
                     onChange={handleChange}
                   />
+                  {getFieldError("password") && (
+                    <span className="mt-3 text-red-400 text-sm auth-error">
+                      {getFieldError("password")}
+                    </span>
+                  )}
                 </div>
 
                 <div className="container-input-control mt-7">
@@ -186,6 +209,12 @@ function Register() {
                     value={formData.confirm_password}
                     onChange={handleChange}
                   />
+
+                  {getFieldError("confirm_password") && (
+                    <span className="mt-3 text-red-400 text-sm auth-error">
+                      {getFieldError("confirm_password")}
+                    </span>
+                  )}
                 </div>
 
                 <div

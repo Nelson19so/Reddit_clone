@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import {
-  LoginUser,
-  handleGoogleAuthApi,
-  isAuthenticated,
-} from "../../utils/accounts/Authservice";
+import { LoginUser, isAuthenticated } from "../../utils/accounts/Authservice";
 import Message from "../../components/layouts/mianlayout/Message";
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import UseGoogleAuth from "../../utils/hooks/UseGoogleAuth";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -33,26 +28,6 @@ function Login() {
     });
   };
 
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const { access_token } = tokenResponse;
-
-        const response = axios.post(`${API_URL}/google/login/`, {
-          token: access_token,
-        });
-
-        // saves JWT token for user
-        localStorage.setItem("access", response.data.access);
-        localStorage.setItem("refresh", response.data.refresh);
-
-        setSuccess("Login successful");
-      } catch (error) {
-        setError("Login failed");
-      }
-    },
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError({});
@@ -61,25 +36,46 @@ function Login() {
 
     if (!response.ok) {
       setError(response.data.error);
-      console.log(response.data.error);
+
       setTimeout(() => {
         setError({});
       }, 5000);
     } else {
-      // setSuccess("User created successfully");
-      console.log("Backend Response", response.message);
       setSuccess(response.message);
+
       setTimeout(() => {
         setSuccess(null);
-      }, 5000);
+      }, 10000);
 
       setFormData({
         email: "",
         password: "",
         confirmpassword: "",
       });
+
       navigate("/");
     }
+  };
+
+  // Handles Google authentication
+  const googleAuth = UseGoogleAuth(
+    () => {
+      setSuccess("Google authentication successful!");
+      setTimeout(() => setSuccess(null), 5000);
+    },
+    () => {
+      setError("Google authentication failed. Try again!");
+      setTimeout(() => setError(null), 5000);
+    }
+  );
+
+  const getFieldError = (fieldName) => {
+    if (error[fieldName]) {
+      return Array.isArray(error[fieldName])
+        ? error[fieldName][0]
+        : error[fieldName];
+    }
+    return "";
   };
 
   return (
@@ -87,18 +83,6 @@ function Login() {
       <div className="message-container__">
         {/* // Success message */}
         {success && <Message success={success} />}
-
-        {/* // Multiple errors stacked */}
-        {Array.isArray(error) &&
-          error.map((err, i) => <Message key={i} error={err} />)}
-        {error &&
-          typeof error === "object" &&
-          Object.entries(error).map(([field, messages], i) => {
-            const messageText = Array.isArray(messages)
-              ? messages.join(", ")
-              : String(messages);
-            return <Message key={i} error={messageText} />;
-          })}
       </div>
 
       {/* {renderErrors()} */}
@@ -131,7 +115,7 @@ function Login() {
               <div className="container-google-option mt-10">
                 <div
                   className="container-google-option-holder bg-white flex justify-center gap-3"
-                  onClick={() => login()}
+                  onClick={() => googleAuth()}
                 >
                   <div className="container_google_svg">
                     {/* <svg
@@ -173,7 +157,7 @@ function Login() {
                 </div>
               </div>
 
-              <div className="container_divider mt-8">
+              <div className="container_divider mt-10">
                 <span>OR</span>
               </div>
 
@@ -184,10 +168,18 @@ function Login() {
                     type="text"
                     id="email"
                     placeholder="Username/Email address"
-                    className="mt-2"
+                    className={`mt-2 ${
+                      getFieldError("username") && "border-red-400"
+                    }`}
                     value={formData.username}
                     onChange={handleChange}
                   />
+
+                  {getFieldError("username") && (
+                    <span className="mt-3 text-red-400 text-sm auth-error">
+                      {getFieldError("username")}
+                    </span>
+                  )}
                 </div>
 
                 <div className="container-input-control mt-7">
@@ -200,6 +192,12 @@ function Login() {
                     value={formData.password}
                     onChange={handleChange}
                   />
+
+                  {getFieldError("password") && (
+                    <span className="mt-3 text-red-400 text-sm auth-error">
+                      {getFieldError("password")}
+                    </span>
+                  )}
                 </div>
 
                 <div

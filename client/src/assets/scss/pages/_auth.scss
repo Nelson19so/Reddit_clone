@@ -33,38 +33,41 @@
     .container_divider {
       text-align: center;
       position: relative;
-      border: 1px solid #808080;
+      border: 1px solid #ef541b;
 
       span {
         position: absolute;
-        top: -12.5px;
+        top: -17px;
         left: 46%;
         color: #fff;
-        background-color: #9e9e9e;
+        background-color: #ef541b;
         font-size: 14px;
-        padding: 0 5px;
-        border-radius: 4px;
+        padding: 7px 8px;
+        border-radius: 100px;
       }
     }
 
     .container-google-option-holder {
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
       padding: 10px;
       border-radius: 30px;
-      padding: 10px 50px;
+      padding: 12px 50px;
       color: #ffff;
       font-size: 14px;
       text-align: center;
-      background-color: #d1876c;
+      background-color: #ff632a;
       cursor: pointer;
       animation: 1s ease-in-out;
       transition: 1s;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 
       &:hover {
         transform: scaleY(1.1);
         background-color: #fd946ed5;
       }
+    }
+
+    .auth-error {
+      color: #ff4400;
     }
 
     label {

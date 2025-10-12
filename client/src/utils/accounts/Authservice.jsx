@@ -97,28 +97,3 @@ export const isAuthenticated = () => {
   const token = localStorage.getItem("access");
   return !!token;
 };
-
-// Google authentication api
-export const handleGoogleAuthApi = async (credentialResponse) => {
-  try {
-    const token = credentialResponse.credential;
-    const response = axios.post(`${API_URL}/google/login/`, { token: token });
-
-    // saves JWT token for user
-    localStorage.setItem("access", response.data.access);
-    localStorage.setItem("refresh", response.data.refresh);
-
-    return {
-      ok: true,
-      message: "User created successfully",
-    };
-  } catch (error) {
-    console.error(error.response.data);
-    return {
-      data: {
-        ok: false,
-        error: error.response?.data || "Registration failed. Try again later.",
-      },
-    };
-  }
-};
