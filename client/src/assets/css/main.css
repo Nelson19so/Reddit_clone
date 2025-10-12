@@ -615,6 +615,11 @@ form textarea {
 .container-auth-page_ {
   background-color: #fff;
 }
+@media only screen and (min-width: 768px) {
+  .container-auth-page_ {
+    padding: 10px 0;
+  }
+}
 .container-auth-page_ .container-items-auth {
   background: linear-gradient(rgba(100, 56, 40, 0.75), rgba(129, 49, 9, 0.95));
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -644,15 +649,15 @@ form textarea {
 .container-auth-page_ .container-items-auth .container_divider {
   text-align: center;
   position: relative;
-  border: 1px solid #ef541b;
+  border: 1px solid #fff;
 }
 .container-auth-page_ .container-items-auth .container_divider span {
   position: absolute;
-  top: -17px;
+  top: -16px;
   left: 46%;
-  color: #fff;
-  background-color: #ef541b;
-  font-size: 14px;
+  color: #ef541b;
+  background-color: white;
+  font-size: 10px;
   padding: 7px 8px;
   border-radius: 100px;
 }
@@ -663,7 +668,7 @@ form textarea {
   color: white;
   font-size: 14px;
   text-align: center;
-  background-color: #ff632a;
+  background-color: #be7c63;
   cursor: pointer;
   animation: 1s ease-in-out;
   transition: 1s;
@@ -674,7 +679,12 @@ form textarea {
   background-color: rgba(253, 148, 110, 0.8352941176);
 }
 .container-auth-page_ .container-items-auth .auth-error {
-  color: #ff4400;
+  color: #ff3737;
+  padding: 2px 4px;
+  width: 100%;
+  display: block;
+  font-size: 12px;
+  border-radius: 4px;
 }
 .container-auth-page_ .container-items-auth label {
   color: rgb(166, 164, 164);

@@ -27,10 +27,11 @@ function Register() {
   }, []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -87,7 +88,7 @@ function Register() {
         {success && <Message success={success} />}
       </div>
 
-      <div className="container-auth-page_ w-[100vw] h-[100vh]">
+      <div className="container-auth-page_ w-[100vw]">
         <div
           className="container-auth-page-padding_ h-[100%] w-[100%] flex justify-center"
           style={{ alignItems: "center" }}
