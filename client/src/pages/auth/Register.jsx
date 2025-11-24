@@ -104,6 +104,7 @@ function Register() {
                 Login
               </Link>
               <Link
+                to="/signup"
                 className={`${
                   location.pathname === "/signup" && "active-auth-link"
                 }`}
@@ -114,7 +115,7 @@ function Register() {
 
             <div className="container-form mt-4">
               <div className="container-google-option mt-10">
-                <Link>
+                <Link to="/signup">
                   <div
                     className="container-google-option-holder bg-white flex justify-center gap-3"
                     onClick={() => googleAuth()}
@@ -172,6 +173,7 @@ function Register() {
                     id="email"
                     placeholder="Your email address"
                     className="mt-2"
+                    name="email"
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -190,6 +192,7 @@ function Register() {
                     id="password"
                     placeholder="Enter your password"
                     className="mt-2"
+                    name="password"
                     value={formData.password}
                     onChange={handleChange}
                   />
@@ -207,6 +210,7 @@ function Register() {
                     id="confirm_password"
                     placeholder="Confirm you know your password"
                     className="mt-2"
+                    name="confirm_password"
                     value={formData.confirm_password}
                     onChange={handleChange}
                   />

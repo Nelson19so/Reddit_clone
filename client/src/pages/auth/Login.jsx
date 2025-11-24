@@ -48,9 +48,8 @@ function Login() {
       }, 10000);
 
       setFormData({
-        email: "",
+        username: "",
         password: "",
-        confirmpassword: "",
       });
 
       navigate("/");
@@ -171,6 +170,7 @@ function Login() {
                     className={`mt-2 ${
                       getFieldError("username") && "border-red-400"
                     }`}
+                    name="username"
                     value={formData.username}
                     onChange={handleChange}
                   />
@@ -189,6 +189,7 @@ function Login() {
                     id="password"
                     placeholder="Enter your password"
                     className="mt-2"
+                    name="password"
                     value={formData.password}
                     onChange={handleChange}
                   />
