@@ -104,6 +104,7 @@ function Register() {
                 Login
               </Link>
               <Link
+                to="/signup"
                 className={`${
                   location.pathname === "/signup" && "active-auth-link"
                 }`}
