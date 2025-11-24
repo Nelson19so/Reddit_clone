@@ -115,7 +115,7 @@ function Register() {
 
             <div className="container-form mt-4">
               <div className="container-google-option mt-10">
-                <Link>
+                <Link to="/signup">
                   <div
                     className="container-google-option-holder bg-white flex justify-center gap-3"
                     onClick={() => googleAuth()}
