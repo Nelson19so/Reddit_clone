@@ -16,17 +16,20 @@ ALLOWED_HOSTS = [
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# PostgreSql Database configuration for production mode
+# PostgreSql Database configuration for production 
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': os.getenv('DB_NAME'),         # DB name
-         'USER': os.getenv('DB_USER'),        # DB username
-         'PASSWORD': os.getenv('DB_PASSWORD'),    # DB password
-         'HOST': os.getenv('DB_HOST'),
-         'PORT': os.getenv('DB_PORT'),                 # Default PostgreSQL port
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
+    }
 }
 
 # DEBUG is set to false for production mode
