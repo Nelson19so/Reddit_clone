@@ -18,23 +18,15 @@ ALLOWED_HOSTS = [
 
 # PostgreSql Database configuration for production mode
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),         # DB name
-#         'USER': os.getenv('DB_USER'),        # DB username
-#         'PASSWORD': os.getenv('DB_PASSWORD'),    # DB password
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),                 # Default PostgreSQL port
-#     }
-# }
-
-# sqlite 3 for the demo preview
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': os.getenv('DB_NAME'),         # DB name
+         'USER': os.getenv('DB_USER'),        # DB username
+         'PASSWORD': os.getenv('DB_PASSWORD'),    # DB password
+         'HOST': os.getenv('DB_HOST'),
+         'PORT': os.getenv('DB_PORT'),                 # Default PostgreSQL port
+     }
 }
 
 # DEBUG is set to false for production mode
