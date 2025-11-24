@@ -48,9 +48,8 @@ function Login() {
       }, 10000);
 
       setFormData({
-        email: "",
+        username: "",
         password: "",
-        confirmpassword: "",
       });
 
       navigate("/");
