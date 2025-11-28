@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
+from cloudinary.models import CloudinaryField
 
 User = get_user_model()
 
@@ -58,7 +59,8 @@ class BlogPost(models.Model):
     )
     title = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to='post_images/', null=True, blank=True)
+    # image = models.ImageField(upload_to='post_images/', null=True, blank=True)
+    image = CloudinaryField('image', folder='post_images', null=True, blank=True)
     slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
