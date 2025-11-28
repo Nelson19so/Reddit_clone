@@ -1,7 +1,0 @@
-{
-  "cleanUrls": true,
-  "images": {
-    "domains": ["res.cloudinary.com", "reddit-clone-5uvr.onrender.com"],
-    "loader": "default"
-  }
-}
