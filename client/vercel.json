@@ -1,0 +1,8 @@
+{
+  "images": {
+    "sizes": [],
+    "domains": ["res.cloudinary.com"],
+    "remotePatterns": [],
+    "unoptimized": true
+  }
+}
