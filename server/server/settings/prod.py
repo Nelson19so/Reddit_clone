@@ -47,7 +47,7 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # DEBUG is set to false for production mode
-DEBUG = True
+DEBUG = False
 
 # if not DEBUG:
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
