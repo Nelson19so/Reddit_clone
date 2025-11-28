@@ -13,8 +13,8 @@ class CommunityAdmin(admin.ModelAdmin):
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    fields = ('id', 'community', 'title', 'content', 'image', 'created_at', 'updated_at', 'slug')
-    list_display = ('id', 'title', 'created_at')
+    fields = ('id', 'author', 'community', 'title', 'content', 'image', 'created_at', 'updated_at', 'slug')
+    list_display = ('id', 'author', 'title', 'created_at')
     list_filter = ('community', 'title', 'created_at', 'updated_at')
     search_fields = ['title']
     readonly_fields = ['id', 'slug', 'updated_at', 'created_at']
