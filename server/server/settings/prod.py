@@ -1,5 +1,8 @@
 from .base import *
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 load_dotenv()
 
@@ -32,8 +35,20 @@ DATABASES = {
     }
 }
 
+# cloudinary config
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUD_API_KEY'),
+    'API_SECRET': os.getenv('CLOUD_API_SECRET'),
+}
+
+# Use Cloudinary for media uploads
+# MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # DEBUG is set to false for production mode
 DEBUG = False
 
 # if not DEBUG:
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+

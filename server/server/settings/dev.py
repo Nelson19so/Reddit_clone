@@ -23,3 +23,7 @@ DATABASES = {
 
 # DEBUG is set to True for development mode
 DEBUG = True
+
+# media file (images, files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
