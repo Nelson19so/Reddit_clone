@@ -13,6 +13,8 @@ function Reddit() {
 
   document.title = "Reddit blog list";
 
+  console.log(blogPost);
+
   const location = useLocation();
 
   const { slug } = useParams();

@@ -59,8 +59,16 @@ class CommunitySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        validated_data['owner'] = request.user
-        return Community.objects.create(**validated_data)
+        community_owner = request.user
+
+        validated_data['owner'] =community_owner
+
+        community = Community.objects.create(**validated_data)
+        
+        # Add owner as a member
+        community.members.add(community_owner)
+        
+        return community
 
 
 # upvote and downvote serializer create
